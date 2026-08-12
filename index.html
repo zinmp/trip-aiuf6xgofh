@@ -2177,6 +2177,14 @@ textarea {
   overflow-x: clip;
 }
 
+/* 저장소를 못 쓰는 기기에서 셸 맨 위에 한 줄 (BUG-027).
+   flex-shrink를 막아 헤더·본문이 밀어내지 못하게 한다 — 안 보이면 없는 것과 같다. */
+.shell-storage-notice {
+  flex: 0 0 auto;
+  margin: var(--sp-3) var(--sp-4) 0;
+  border-radius: var(--r-sm);
+}
+
 /* 상단 헤더 — 역명판처럼 얇은 규칙선 위에 제목, 우측에 테마 토글 */
 .shell-header {
   position: sticky;
@@ -4709,6 +4717,40 @@ window.__TPBOOT && __TPBOOT.mark("engine/index.js");
     }
   }
 
+  /**
+   * 저장소 사용 가능 여부. null이면 아직 재보지 않았다.
+   * 한 번 잰 값을 캐시한다 — 매 save마다 탐침을 쓰면 그 자체가 용량을 먹는다.
+   */
+  let storageOk = null;
+
+  /**
+   * 저장소를 **실제로 쓸 수 있는지** 확인한다 (BUG-027).
+   *
+   * 핸들이 있다고 쓸 수 있는 게 아니다. iOS 사생활 보호 모드와 `file://`로 연 문서는
+   * localStorage 객체는 멀쩡히 주면서 setItem에서만 던진다. 그래서 읽기가 아니라
+   * **써 보고** 판단한다. 앱은 이 값이 false여도 메모리 상태로 정상 동작한다 —
+   * 다만 셸이 "닫으면 사라진다"고 한 줄 알려준다.
+   *
+   * @returns {boolean}
+   */
+  function available() {
+    if (storageOk !== null) return storageOk;
+    const s = storage();
+    if (!s) {
+      storageOk = false;
+      return false;
+    }
+    const probe = STORAGE_KEY + ':probe';
+    try {
+      s.setItem(probe, '1');
+      s.removeItem(probe);
+      storageOk = true;
+    } catch (e) {
+      storageOk = false;
+    }
+    return storageOk;
+  }
+
   /** 구독자에게 알린다. 한 구독자가 던져도 나머지는 계속 받는다. */
   function notify(next, prev) {
     for (const fn of listeners.slice()) {
@@ -4843,6 +4885,7 @@ window.__TPBOOT && __TPBOOT.mark("engine/index.js");
    */
   function load() {
     state = initialState();
+    storageOk = null;             // 부팅마다 다시 잰다 (사생활 보호 모드는 켜고 끌 수 있다)
 
     const s = storage();
     if (!s) return state;         // DOM storage 차단 — 메모리 상태로 그냥 간다
@@ -4939,6 +4982,7 @@ window.__TPBOOT && __TPBOOT.mark("engine/index.js");
     STORAGE_KEY: STORAGE_KEY,
     initialState: initialState,
     getState: getState,
+    available: available,
     setState: setState,
     subscribe: subscribe,
     load: load,
@@ -6297,8 +6341,17 @@ window.__TPBOOT && __TPBOOT.mark("app/src/core/geo.js");
    */
   function init(rootElement, appData) {
     if (typeof document === 'undefined') return;
-    rootEl = rootElement || document.getElementById('app');
-    if (!rootEl) return;
+    const nextRoot = rootElement || document.getElementById('app');
+    if (!nextRoot) return;
+
+    // 다른 컨테이너로 다시 띄우면 이전 마운트 기록은 남아 있으면 안 된다.
+    // 남아 있으면 renderOnboarding이 "이미 마운트됨"으로 보고 아무것도 그리지 않아
+    // **새 컨테이너가 빈 채로 남는다** (BUG-027의 백지와 같은 모양).
+    if (rootEl && rootEl !== nextRoot) {
+      teardown();
+      storageNotice = null;
+    }
+    rootEl = nextRoot;
     data = appData || {};
 
     // BUG-003: 템플릿이 이미 불렀어도 중복 설치되지 않는다.
@@ -6373,11 +6426,38 @@ window.__TPBOOT && __TPBOOT.mark("app/src/core/geo.js");
       applyThemeAttr(themeOf(st));
       if (st.phase === 'app' && st.trip) renderApp(st);
       else renderOnboarding(st);
+      ensureStorageNotice();
     } catch (err) {
       logError('render', err);
     } finally {
       rendering = false;
     }
+  }
+
+  /** 저장소를 못 쓸 때 띄우는 한 줄. teardown이 지워도 매 render마다 다시 세운다. */
+  let storageNotice = null;
+
+  /**
+   * 저장이 안 되는 환경이면 그 사실을 한 줄로 알린다 (BUG-027).
+   *
+   * 조용히 메모리로 굴러가면 사용자는 "입력이 저장된 줄" 안다. 기능은 전부 되지만
+   * 앱을 닫으면 사라진다는 것만 알려주면 된다 — 막지도, 반복해서 띄우지도 않는다.
+   */
+  function ensureStorageNotice() {
+    const store = mod('store');
+    // available()이 없는 예전 store와도 같이 돌아간다 — 없으면 아무것도 하지 않는다.
+    if (!store || typeof store.available !== 'function') return;
+    if (call(store, 'available', [], true) !== false) return;
+    if (storageNotice && storageNotice.parentNode === rootEl) return;
+
+    storageNotice = el('div', 'notice notice--warn shell-storage-notice');
+    storageNotice.setAttribute('role', 'status');
+    storageNotice.appendChild(el(
+      'p', null,
+      '이 기기에서는 저장 공간을 쓸 수 없어 메모리에서만 동작합니다. ' +
+      '계획은 그대로 세울 수 있지만 앱을 닫으면 사라집니다.'
+    ));
+    rootEl.insertBefore(storageNotice, rootEl.firstChild);
   }
 
   function renderOnboarding(st) {
