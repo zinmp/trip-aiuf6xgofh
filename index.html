@@ -25,19 +25,22 @@
 /* ============================================================================
  * tokens.css — 디자인 토큰 (색 · 타이포 · 간격 · 권역색)
  *
- * 컨셉: **인쇄된 일본 철도 시각표.** 카드 더미가 아니라 괘선으로 나뉜 한 장의 표다.
- *       그래서 이 파일이 정하는 것은 "무엇을 상자에 담을까"가 아니라
- *       **어디에 선을 긋고, 어떤 숫자를 크게 찍을까**다.
+ * 컨셉: **밤의 노선도.** 이 앱이 다루는 것은 시각표가 아니라 **설레는 계획**이다.
+ *       그래서 화면은 괘선으로 나뉜 한 장의 표가 아니라, 깊은 밤 위에 떠 있는
+ *       **면(블록)들**이고, 그 위를 노선색이 지나간다.
  *
  * 색을 놓는 자리 — 이 순서가 곧 우선순위다:
- *   1) 잉크와 종이     화면의 90%는 --ink / --bg 두 색이다. 여기서 승부를 본다.
- *   2) 괘선            --line(머리카락) · --line-strong(굵은 칸선) · --rail(노선)
- *   3) 액센트 하나     **조작에만** 쓴다 — 포커스 · 링크 · 선택된 탭 · 주 버튼.
- *                      장식으로 쓰지 않는다. 액센트가 보이면 "누를 수 있다"는 뜻이다.
- *   4) 분류색 3개      먹거리 · 쇼핑 · 관광. 글자색으로만, 배지 안에서만.
- *   5) 권역색 17개     **도해(圖解)에서만** 쓴다 — 타임라인 레일·역 점, 지도 위 영역.
- *                      목록 카드·필터 칩·배지를 물들이지 않는다. 거기서는 이름이 곧 식별자다.
- *   6) 상태색          경고·위험. 면을 칠하지 않고 굵은 좌측 괘선과 제목 글자색으로 말한다.
+ *   1) 밤과 면        --bg 위에 --surface / --surface-2 가 뜬다. 뜰수록 밝기와
+ *                      **푸른 기운이 함께** 오른다. 이것이 다크의 깊이를 만든다.
+ *   2) 朱 하나        --solid / --accent. **면으로 칠한다** — 주 버튼 · 고른 날짜 ·
+ *                      지금 보는 날. 화면에서 색이 꽉 찬 자리는 여기뿐이라 시선이 여기로 온다.
+ *   3) 권역색 17개    **장소의 정체성**이다. 날짜 칩의 노선 막대 · 타임라인 레일 ·
+ *                      역 점 · 지도. 목록과 지도가 **같은 색말**을 쓰게 한다.
+ *   4) 분류색 3개      먹거리 · 쇼핑 · 관광. **tint/solid 쌍** — 옅은 면에 진한 글자.
+ *   5) 상태색          경고·위험·성공. 같은 tint/solid 쌍이되 좌측 굵은 괘선을 함께 쓴다.
+ *
+ * tint/solid 쌍이 이 파일의 뼈대다. `--cat-food` (진한 글자) 와 `--cat-food-weak`
+ * (옅은 면)가 한 짝이다. 색을 여섯 가지 써도 화면이 시끄럽지 않은 이유가 이것이다.
  *
  * ⚠ 색상 리터럴(#hex · rgb() · 색 이름)이 존재하는 유일한 파일이다.
  *   base/components/views.css 는 var(--토큰)만 참조한다. currentColor 는 예외로 허용.
@@ -59,66 +62,71 @@
 :root {
   color-scheme: light dark;
 
-
-  /* 표면 · 선 — 시각표를 찍은 찬 기운의 종이.
-     순백을 쓰지 않는다. #FFFFFF 카드는 "아무도 고르지 않은 값"이다. */
-  --bg:          #EDF1F5;  /* 본문 바탕 = 종이. 화면 대부분이 이 색이다 */
-  --surface:     #FBFCFE;  /* 한 단 들린 면 (시트 · 달력 · 자동완성) */
-  --surface-2:   #E1E7EE;  /* 한 단 낮은 면 (세그먼트 홈, 배지) */
-  --surface-3:   #D2DAE3;  /* 눌림 · 선택 상태 */
-  --line:        #B6C4D3;  /* 머리카락 괘선 — 행과 행 사이 (바탕 대비 1.56:1) */
-  --line-strong: #78889A;  /* 굵은 칸선 · 열 구분선 (바탕 대비 3.2:1) */
+  /* 표면 — 배경 위에 **면이 떠 있다.** 괘선으로 칸을 나누던 판을 접고,
+     둥근 면(블록)으로 묶는다. 네 단은 밝기만이 아니라 **푸른 기운도 함께** 오른다. */
+  --bg:          #F1F4F7;  /* 캔버스. 화면에서 제일 뒤 */
+  --surface:     #FFFFFF;  /* 블록 — 카드 · 달력 · 입력칸이 앉는 면 */
+  --surface-2:   #E8EDF2;  /* 블록 안의 조각 — 배지 · 보조 버튼 · 세그먼트 홈 */
+  --surface-3:   #DCE3EA;  /* 눌림 */
+  --line:        #D5DEE6;  /* 머리카락 괘선 — 이제 표를 그리지 않고 목록 행만 나눈다 */
+  --line-strong: #6E8092;  /* 굵은 칸선 (바탕 대비 3.68:1) */
   --clear:       rgba(0,0,0,0);  /* 투명. 레이아웃 유지용 빈 테두리에 쓴다 */
 
-  /* 텍스트 */
-  --ink:   #0E1720;  /* 본문. 잉크다 — 이 색으로 칠한 면이 이 앱의 가장 강한 조형이다 */
-  --muted: #4C5A67;  /* 보조 (바탕 대비 6.2:1) */
-  --faint: #596774;  /* 가장 약한 라벨 · 플레이스홀더 (surface-2 위에서도 4.6:1) */
+  /* 텍스트 — 순검정을 쓰지 않는다. 청회색으로 기운 잉크다 */
+  --ink:   #131A22;  /* 본문 (바탕 대비 15.9:1) */
+  --muted: #4E5A67;  /* 보조 (6.4:1) */
+  --faint: #57636F;  /* 가장 약한 라벨 (surface-2 위에서도 5.2:1) */
 
-  /* 브랜드 액센트 — 단 하나. 그리고 **조작에만** 쓴다 */
-  --accent:        #0B6480;  /* 행선 표시기의 신호색 */
-  --accent-weak:   #DCE9EE;  /* 액센트 톤 배경 (단색 폴백용) */
-  --accent-line:   #4E93AD;  /* 액센트 톤 테두리 (바탕 대비 3.0:1) */
-  --focus:         #0B6480;  /* 포커스 링 (바탕 대비 5.9:1) */
+  /* 朱 — 이 앱의 단 하나의 브랜드색. **면으로 쓴다** */
+  --accent:      #BE3A1F;  /* 글자·아이콘일 때 (바탕 대비 5.0:1) */
+  --accent-weak: #FDEAE4;  /* 옅은 주홍 면 — tint/solid 쌍의 tint 쪽 */
+  --accent-line: #E4633F;  /* 주홍 테두리 (바탕 대비 3.1:1) */
+  --focus:       #BE3A1F;  /* 포커스 링 (5.0:1) */
 
-  /* 확정된 면 — 주 버튼 · 고른 항목 · 눌린 세그먼트.
-     **액센트로 칠하지 않는다.** 밝은 하늘색 버튼 하나가 화면에서 제일 시끄러운
-     물건이 되던 것을 여기서 끊었다. 존재감은 채도가 아니라 **명도차**로 만든다 —
-     라이트에서는 어두운 잉크 면, 다크에서는 밝은 잉크 면. 색이 아니라 무게로 선다. */
-  --solid:     #16222D;  /* 바탕 대비 14.2:1 */
-  --solid-ink: #F3F7FA;  /* 그 면 위의 글자 (15.0:1) */
+  /* 확정된 면 — 주 버튼 · 고른 날짜 · 지금 보는 날 · 눌린 세그먼트.
+     예전에는 이 자리를 잉크(무채색)로 칠했다. 그래서 화면에 표정이 없었다.
+     이제 **주홍 면**이다. 화면에서 색이 꽉 찬 자리는 여기 하나뿐이라 시선이 반드시 여기로 온다. */
+  --solid:     #C63D1E;  /* 바탕 대비 4.4:1 (면이므로 3:1 기준) */
+  --solid-ink: #FFF7F4;  /* 그 면 위의 글자 (4.9:1) */
 
-  /* 고른 구간의 띠 — 달력의 여행 기간, 고른 목록 행.
-     칸마다 다른 채움을 주지 않는다. 띠는 **하나의 색으로 이어지고** 양 끝만
-     잉크 괘선으로 끊는다. 이 위에 얹는 글자는 항상 --ink 다. */
-  --sel-band:  #ADC5DA;  /* 잉크 대비 10.1:1 · 바탕 대비 1.6:1 */
+  /* 고른 구간의 띠 — 달력의 여행 기간. 주홍의 가장 옅은 단 */
+  --sel-band:  #F9D0C1;  /* 잉크 대비 12.7:1 · 주 버튼과 같은 계열의 옅은 단 */
 
-  /* 기능색 — 상태. 면이 아니라 괘선과 글자색으로 말한다 (weak는 작은 배지 안에서만) */
-  --ok:          #256B47;
-  --ok-weak:     #DDEDE4;
-  --warn:        #8A5806;
-  --warn-weak:   #F3E8D2;
-  --danger:      #9E2E26;
-  --danger-weak: #F6E1DE;
+  /* 기능색 — 상태. tint/solid 쌍이다 (weak = 면, 본색 = 그 위의 글자) */
+  --ok:          #1D6A45;
+  --ok-weak:     #DCEFE3;
+  --warn:        #875206;
+  --warn-weak:   #F6E9D0;
+  --danger:      #A82C22;
+  --danger-weak: #FAE2DF;
 
-  /* 기능색 — 분류 (먹거리 · 쇼핑 · 관광). 배지 **글자색**으로만 쓴다 */
-  --cat-food:  #94402C;
-  --cat-shop:  #514491;
-  --cat-sight: #2A6B57;
+  /* 기능색 — 분류(먹거리 · 쇼핑 · 관광)도 같은 tint/solid 쌍이다.
+     한국 앱이 색을 많이 쓰면서도 시끄럽지 않은 이유가 이 방식이다 —
+     옅은 면에 진한 같은 계열 글자. 액센트(朱)와 겹치지 않는 세 자리에 뒀다. */
+  --cat-food:       #A42D55;  /* 로즈 */
+  --cat-food-weak:  #FBE4EC;
+  --cat-shop:       #4A3E9E;  /* 라벤더 */
+  --cat-shop-weak:  #EAE7FA;
+  --cat-sight:      #16645E;  /* 청록 */
+  --cat-sight-weak: #DDF0EE;
 
-  /* 타임라인 레일 — 노선도의 선이다. 흐릿한 장식이 아니라 구조라서 진하다 */
-  --rail:      #788999;  /* 노선 레일 (바탕 대비 3.2:1) */
-  --rail-done: #B3BFCB;  /* 다녀온 구간 — 색만이 아니라 속 빈 점으로도 갈린다 */
-  --dot-ink:   #FBFCFE;  /* 역 점 안쪽 (레일색 테두리 + 이 색 중심) */
+  /* 타임라인 레일 — 노선도의 선이다. 굵어졌다 */
+  --rail:      #6E8092;  /* 바탕 대비 3.68:1 */
+  --rail-done: #B4C0CB;  /* 다녀온 구간 — 색만이 아니라 속 빈 점으로도 갈린다 */
+  --dot-ink:   #FFFFFF;  /* 역 점 안쪽 */
 
-  /* 지도 */
-  --map-land:  #E4EAF0;
-  --map-ink:   #768595;  /* 격자·축척 (지면 대비 3.1:1) */
+  /* 지도 — 바탕을 죽여서 **동선 한 줄이 화면에서 제일 진하게** 남도록 한다 */
+  --map-land:  #E5EBF1;
+  --map-ink:   #74849A;  /* 격자·축척 (지면 대비 3.0:1) */
+  /* OSM 타일을 한 단 죽인다 — **동선 한 줄과 번호 마커가 화면에서 제일 진해야** 한다.
+     원색 타일 위에 노선색을 얹으면 둘이 같은 목소리로 떠들어 아무것도 안 읽힌다.
+     지명은 우리가 그 위에 SVG로 다시 찍으므로 타일 글자가 흐려도 잃는 정보가 없다. */
+  --map-tile-tone: saturate(.72) contrast(.96);
 
-  /* 겹침 · 그림자 — 그림자는 시트에만 남겼다. 카드에는 쓰지 않는다 */
-  --scrim:    rgba(10,18,26,.46);  /* 시트 뒤 스크림 */
-  --shadow-1: 0 1px 2px rgba(14,23,32,.07);
-  --shadow-2: 0 -1px 0 rgba(14,23,32,.06), 0 12px 32px rgba(14,23,32,.14);
+  /* 겹침 · 그림자 */
+  --scrim:    rgba(12,18,26,.44);
+  --shadow-1: 0 1px 3px rgba(19,26,34,.10);
+  --shadow-2: 0 -1px 0 rgba(19,26,34,.05), 0 16px 40px rgba(19,26,34,.16);
 
   /* 권역색 = 노선색 (도해 전용 — 레일 · 역 점 · 지도 영역) */
   --area-namba:      #B33A3E;  /* 오사카 · 미도스지선 레드 */
@@ -175,61 +183,67 @@
 @media (prefers-color-scheme: dark) {
   :root {
 
-
-    /* 표면 · 선 — 심야 전철 차창 밖의 남회색. **검정이 아니다.**
-       거의 검은 바탕에 형광색 하나는 이 프로젝트에서 쓰지 않기로 한 조합이다. */
-    --bg:          #141C24;
-    --surface:     #1B242E;
-    --surface-2:   #232E39;
-    --surface-3:   #2C3844;
-    --line:        #303C48;
-    --line-strong: #5C6D7E;
+    /* 표면 — **검정이 아니다.** 푸른 기가 도는 심야색이고, 면이 뜰수록
+       밝기와 함께 **푸른 기운도 넓어진다**(B−R: 12 → 18 → 22 → 27).
+       이 한 가지가 다크를 "검은 배경"이 아니라 깊이 있는 밤으로 만든다. */
+    --bg:          #10151C;
+    --surface:     #172029;
+    --surface-2:   #202B36;
+    --surface-3:   #2B3846;
+    --line:        #26313D;
+    --line-strong: #657A8D;  /* 굵은 칸선 — 가장 밝은 면(surface-2) 위에서도 3.23:1 */
     --clear:       rgba(0,0,0,0);
 
-    /* 텍스트 */
-    --ink:   #E3EAF1;
-    --muted: #9EADBA;
-    --faint: #8B9BA9;
+    /* 텍스트 — 순백을 쓰지 않는다. 검정 위의 순백은 글자가 번져 보인다(halation) */
+    --ink:   #E9EEF3;  /* 바탕 대비 15.7:1 */
+    --muted: #A3B2C0;  /* 8.5:1 */
+    --faint: #97A8B7;  /* surface-2 위에서 5.9:1 */
 
-    /* 브랜드 액센트 — 라이트의 반전이 아니다. 빛나지 않도록 채도를 낮춘 강철빛이다 */
-    --accent:        #6FB6D4;
-    --accent-weak:   #16303C;
-    --accent-line:   #457C95;
-    --focus:         #8FCAE2;
+    /* 朱 — 다크에서는 채도를 낮추지 않고 **명도를 올린다**. 밤에 켜진 등불 쪽이다 */
+    --accent:      #FF7A5E;  /* 바탕 대비 7.2:1 */
+    --accent-weak: #331410;  /* 어두운 주홍 면 */
+    --accent-line: #FF7A5E;
+    --focus:       #FF9578;  /* 8.6:1 */
 
-    /* 확정된 면 — 다크에서는 **밝은 잉크 면**이다. 형광 시안 버튼의 자리를 이것이 대신한다 */
-    --solid:     #BFCEDB;  /* 바탕 대비 10.7:1 */
-    --solid-ink: #101922;  /* 그 면 위의 글자 (11.0:1) */
+    /* 확정된 면 — 다크에서는 밝은 주홍 면에 아주 어두운 글자다 (M3의 container/on-container) */
+    --solid:     #FF7554;  /* 바탕 대비 6.9:1 */
+    --solid-ink: #24090A;  /* 그 면 위의 글자 (7.1:1) */
 
     /* 고른 구간의 띠 */
-    --sel-band:  #3A4D62;  /* 잉크 대비 7.2:1 · 바탕 대비 2.0:1 */
+    --sel-band:  #5A4038;  /* 잉크 대비 8.1:1 · 채도를 낮춘 따뜻한 회갈 — 진한 주홍 끝점 사이를 잇는다 */
 
-    /* 기능색 — 상태 */
-    --ok:          #63BE8E;
-    --ok-weak:     #14322A;
-    --warn:        #D8A85C;
-    --warn-weak:   #322813;
-    --danger:      #EE8078;
-    --danger-weak: #3A1E1C;
+    /* 기능색 — 상태 (tint/solid 쌍) */
+    --ok:          #63C892;
+    --ok-weak:     #0E2E1F;
+    --warn:        #E8B45E;
+    --warn-weak:   #33260F;
+    --danger:      #F4736B;
+    --danger-weak: #3A1917;
 
-    /* 기능색 — 분류 */
-    --cat-food:  #E0937C;
-    --cat-shop:  #A79BE6;
-    --cat-sight: #71C2A6;
+    /* 기능색 — 분류 (tint/solid 쌍) */
+    --cat-food:       #FF8FB4;
+    --cat-food-weak:  #38161F;
+    --cat-shop:       #B7A6FF;
+    --cat-shop-weak:  #231F3D;
+    --cat-sight:      #5FD3C8;
+    --cat-sight-weak: #0F2E2C;
 
     /* 타임라인 레일 */
-    --rail:      #627486;
-    --rail-done: #394654;
-    --dot-ink:   #141C24;
+    --rail:      #6B7F93;
+    --rail-done: #3A4653;
+    --dot-ink:   #10151C;
 
     /* 지도 */
-    --map-land:  #1A232D;
-    --map-ink:   #647484;
+    --map-land:  #131B24;
+    --map-ink:   #64768A;
+    /* 다크에서는 더 깊이 죽인다 — 밝은 원색 타일 한 장이 화면에서 제일 밝은 물건이 되면
+       그 순간 다크가 아니다 */
+    --map-tile-tone: saturate(.55) brightness(.62) contrast(1.04);
 
-    /* 겹침 · 그림자 */
-    --scrim:    rgba(4,8,12,.66);
-    --shadow-1: 0 1px 2px rgba(0,0,0,.40);
-    --shadow-2: 0 -1px 0 rgba(0,0,0,.30), 0 14px 36px rgba(0,0,0,.55);
+    /* 겹침 · 그림자 — 다크에서 경계는 그림자가 아니라 면의 밝기가 만든다 */
+    --scrim:    rgba(3,6,10,.68);
+    --shadow-1: 0 1px 3px rgba(0,0,0,.45);
+    --shadow-2: 0 -1px 0 rgba(0,0,0,.30), 0 18px 44px rgba(0,0,0,.58);
 
     /* 권역색 = 노선색 (다크는 명도를 올려 따로 조정한 값이다) */
     --area-namba:      #E4787B;  /* 오사카 · 미도스지선 레드 */
@@ -286,60 +300,71 @@
 :root[data-theme="light"] {
   color-scheme: light;
 
+  /* 표면 — 배경 위에 **면이 떠 있다.** 괘선으로 칸을 나누던 판을 접고,
+     둥근 면(블록)으로 묶는다. 네 단은 밝기만이 아니라 **푸른 기운도 함께** 오른다. */
+  --bg:          #F1F4F7;  /* 캔버스. 화면에서 제일 뒤 */
+  --surface:     #FFFFFF;  /* 블록 — 카드 · 달력 · 입력칸이 앉는 면 */
+  --surface-2:   #E8EDF2;  /* 블록 안의 조각 — 배지 · 보조 버튼 · 세그먼트 홈 */
+  --surface-3:   #DCE3EA;  /* 눌림 */
+  --line:        #D5DEE6;  /* 머리카락 괘선 — 이제 표를 그리지 않고 목록 행만 나눈다 */
+  --line-strong: #6E8092;  /* 굵은 칸선 (바탕 대비 3.68:1) */
+  --clear:       rgba(0,0,0,0);  /* 투명. 레이아웃 유지용 빈 테두리에 쓴다 */
 
-  /* 표면 · 선 — 시각표를 찍은 찬 기운의 종이 */
-  --bg:          #EDF1F5;
-  --surface:     #FBFCFE;
-  --surface-2:   #E1E7EE;
-  --surface-3:   #D2DAE3;
-  --line:        #B6C4D3;  /* 머리카락 괘선 — 행과 행 사이 (바탕 대비 1.56:1) */
-  --line-strong: #78889A;
-  --clear:       rgba(0,0,0,0);
+  /* 텍스트 — 순검정을 쓰지 않는다. 청회색으로 기운 잉크다 */
+  --ink:   #131A22;  /* 본문 (바탕 대비 15.9:1) */
+  --muted: #4E5A67;  /* 보조 (6.4:1) */
+  --faint: #57636F;  /* 가장 약한 라벨 (surface-2 위에서도 5.2:1) */
 
-  /* 텍스트 */
-  --ink:   #0E1720;
-  --muted: #4C5A67;
-  --faint: #596774;
+  /* 朱 — 이 앱의 단 하나의 브랜드색. **면으로 쓴다** */
+  --accent:      #BE3A1F;  /* 글자·아이콘일 때 (바탕 대비 5.0:1) */
+  --accent-weak: #FDEAE4;  /* 옅은 주홍 면 — tint/solid 쌍의 tint 쪽 */
+  --accent-line: #E4633F;  /* 주홍 테두리 (바탕 대비 3.1:1) */
+  --focus:       #BE3A1F;  /* 포커스 링 (5.0:1) */
 
-  /* 브랜드 액센트 — 단 하나. 그리고 조작에만 쓴다 */
-  --accent:        #0B6480;
-  --accent-weak:   #DCE9EE;
-  --accent-line:   #4E93AD;
-  --focus:         #0B6480;
+  /* 확정된 면 — 주 버튼 · 고른 날짜 · 지금 보는 날 · 눌린 세그먼트.
+     예전에는 이 자리를 잉크(무채색)로 칠했다. 그래서 화면에 표정이 없었다.
+     이제 **주홍 면**이다. 화면에서 색이 꽉 찬 자리는 여기 하나뿐이라 시선이 반드시 여기로 온다. */
+  --solid:     #C63D1E;  /* 바탕 대비 4.4:1 (면이므로 3:1 기준) */
+  --solid-ink: #FFF7F4;  /* 그 면 위의 글자 (4.9:1) */
 
-  /* 확정된 면 — 라이트에서는 어두운 잉크 면 */
-  --solid:     #16222D;  /* 바탕 대비 14.2:1 */
-  --solid-ink: #F3F7FA;  /* 그 면 위의 글자 (15.0:1) */
+  /* 고른 구간의 띠 — 달력의 여행 기간. 주홍의 가장 옅은 단 */
+  --sel-band:  #F9D0C1;  /* 잉크 대비 12.7:1 · 주 버튼과 같은 계열의 옅은 단 */
 
-  /* 고른 구간의 띠 */
-  --sel-band:  #ADC5DA;  /* 잉크 대비 10.1:1 · 바탕 대비 1.6:1 */
+  /* 기능색 — 상태. tint/solid 쌍이다 (weak = 면, 본색 = 그 위의 글자) */
+  --ok:          #1D6A45;
+  --ok-weak:     #DCEFE3;
+  --warn:        #875206;
+  --warn-weak:   #F6E9D0;
+  --danger:      #A82C22;
+  --danger-weak: #FAE2DF;
 
-  /* 기능색 — 상태 */
-  --ok:          #256B47;
-  --ok-weak:     #DDEDE4;
-  --warn:        #8A5806;
-  --warn-weak:   #F3E8D2;
-  --danger:      #9E2E26;
-  --danger-weak: #F6E1DE;
+  /* 기능색 — 분류(먹거리 · 쇼핑 · 관광)도 같은 tint/solid 쌍이다.
+     한국 앱이 색을 많이 쓰면서도 시끄럽지 않은 이유가 이 방식이다 —
+     옅은 면에 진한 같은 계열 글자. 액센트(朱)와 겹치지 않는 세 자리에 뒀다. */
+  --cat-food:       #A42D55;  /* 로즈 */
+  --cat-food-weak:  #FBE4EC;
+  --cat-shop:       #4A3E9E;  /* 라벤더 */
+  --cat-shop-weak:  #EAE7FA;
+  --cat-sight:      #16645E;  /* 청록 */
+  --cat-sight-weak: #DDF0EE;
 
-  /* 기능색 — 분류 */
-  --cat-food:  #94402C;
-  --cat-shop:  #514491;
-  --cat-sight: #2A6B57;
+  /* 타임라인 레일 — 노선도의 선이다. 굵어졌다 */
+  --rail:      #6E8092;  /* 바탕 대비 3.68:1 */
+  --rail-done: #B4C0CB;  /* 다녀온 구간 — 색만이 아니라 속 빈 점으로도 갈린다 */
+  --dot-ink:   #FFFFFF;  /* 역 점 안쪽 */
 
-  /* 타임라인 레일 */
-  --rail:      #788999;
-  --rail-done: #B3BFCB;
-  --dot-ink:   #FBFCFE;
-
-  /* 지도 */
-  --map-land:  #E4EAF0;
-  --map-ink:   #768595;
+  /* 지도 — 바탕을 죽여서 **동선 한 줄이 화면에서 제일 진하게** 남도록 한다 */
+  --map-land:  #E5EBF1;
+  --map-ink:   #74849A;  /* 격자·축척 (지면 대비 3.0:1) */
+  /* OSM 타일을 한 단 죽인다 — **동선 한 줄과 번호 마커가 화면에서 제일 진해야** 한다.
+     원색 타일 위에 노선색을 얹으면 둘이 같은 목소리로 떠들어 아무것도 안 읽힌다.
+     지명은 우리가 그 위에 SVG로 다시 찍으므로 타일 글자가 흐려도 잃는 정보가 없다. */
+  --map-tile-tone: saturate(.72) contrast(.96);
 
   /* 겹침 · 그림자 */
-  --scrim:    rgba(10,18,26,.46);
-  --shadow-1: 0 1px 2px rgba(14,23,32,.07);
-  --shadow-2: 0 -1px 0 rgba(14,23,32,.06), 0 12px 32px rgba(14,23,32,.14);
+  --scrim:    rgba(12,18,26,.44);
+  --shadow-1: 0 1px 3px rgba(19,26,34,.10);
+  --shadow-2: 0 -1px 0 rgba(19,26,34,.05), 0 16px 40px rgba(19,26,34,.16);
 
   /* 권역색 = 노선색 */
   --area-namba:      #B33A3E;  /* 오사카 · 미도스지선 레드 */
@@ -395,60 +420,67 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-
-  /* 표면 · 선 — 심야 전철 차창 밖의 남회색. 검정이 아니다 */
-  --bg:          #141C24;
-  --surface:     #1B242E;
-  --surface-2:   #232E39;
-  --surface-3:   #2C3844;
-  --line:        #303C48;
-  --line-strong: #5C6D7E;
+  /* 표면 — **검정이 아니다.** 푸른 기가 도는 심야색이고, 면이 뜰수록
+     밝기와 함께 **푸른 기운도 넓어진다**(B−R: 12 → 18 → 22 → 27).
+     이 한 가지가 다크를 "검은 배경"이 아니라 깊이 있는 밤으로 만든다. */
+  --bg:          #10151C;
+  --surface:     #172029;
+  --surface-2:   #202B36;
+  --surface-3:   #2B3846;
+  --line:        #26313D;
+  --line-strong: #657A8D;  /* 굵은 칸선 — 가장 밝은 면(surface-2) 위에서도 3.23:1 */
   --clear:       rgba(0,0,0,0);
 
-  /* 텍스트 */
-  --ink:   #E3EAF1;
-  --muted: #9EADBA;
-  --faint: #8B9BA9;
+  /* 텍스트 — 순백을 쓰지 않는다. 검정 위의 순백은 글자가 번져 보인다(halation) */
+  --ink:   #E9EEF3;  /* 바탕 대비 15.7:1 */
+  --muted: #A3B2C0;  /* 8.5:1 */
+  --faint: #97A8B7;  /* surface-2 위에서 5.9:1 */
 
-  /* 브랜드 액센트 — 빛나지 않도록 채도를 낮춘 강철빛 */
-  --accent:        #6FB6D4;
-  --accent-weak:   #16303C;
-  --accent-line:   #457C95;
-  --focus:         #8FCAE2;
+  /* 朱 — 다크에서는 채도를 낮추지 않고 **명도를 올린다**. 밤에 켜진 등불 쪽이다 */
+  --accent:      #FF7A5E;  /* 바탕 대비 7.2:1 */
+  --accent-weak: #331410;  /* 어두운 주홍 면 */
+  --accent-line: #FF7A5E;
+  --focus:       #FF9578;  /* 8.6:1 */
 
-  /* 확정된 면 — 다크에서는 밝은 잉크 면 */
-  --solid:     #BFCEDB;  /* 바탕 대비 10.7:1 */
-  --solid-ink: #101922;  /* 그 면 위의 글자 (11.0:1) */
+  /* 확정된 면 — 다크에서는 밝은 주홍 면에 아주 어두운 글자다 (M3의 container/on-container) */
+  --solid:     #FF7554;  /* 바탕 대비 6.9:1 */
+  --solid-ink: #24090A;  /* 그 면 위의 글자 (7.1:1) */
 
   /* 고른 구간의 띠 */
-  --sel-band:  #3A4D62;  /* 잉크 대비 7.2:1 · 바탕 대비 2.0:1 */
+  --sel-band:  #5A4038;  /* 잉크 대비 8.1:1 · 채도를 낮춘 따뜻한 회갈 — 진한 주홍 끝점 사이를 잇는다 */
 
-  /* 기능색 — 상태 */
-  --ok:          #63BE8E;
-  --ok-weak:     #14322A;
-  --warn:        #D8A85C;
-  --warn-weak:   #322813;
-  --danger:      #EE8078;
-  --danger-weak: #3A1E1C;
+  /* 기능색 — 상태 (tint/solid 쌍) */
+  --ok:          #63C892;
+  --ok-weak:     #0E2E1F;
+  --warn:        #E8B45E;
+  --warn-weak:   #33260F;
+  --danger:      #F4736B;
+  --danger-weak: #3A1917;
 
-  /* 기능색 — 분류 */
-  --cat-food:  #E0937C;
-  --cat-shop:  #A79BE6;
-  --cat-sight: #71C2A6;
+  /* 기능색 — 분류 (tint/solid 쌍) */
+  --cat-food:       #FF8FB4;
+  --cat-food-weak:  #38161F;
+  --cat-shop:       #B7A6FF;
+  --cat-shop-weak:  #231F3D;
+  --cat-sight:      #5FD3C8;
+  --cat-sight-weak: #0F2E2C;
 
   /* 타임라인 레일 */
-  --rail:      #627486;
-  --rail-done: #394654;
-  --dot-ink:   #141C24;
+  --rail:      #6B7F93;
+  --rail-done: #3A4653;
+  --dot-ink:   #10151C;
 
   /* 지도 */
-  --map-land:  #1A232D;
-  --map-ink:   #647484;
+  --map-land:  #131B24;
+  --map-ink:   #64768A;
+  /* 다크에서는 더 깊이 죽인다 — 밝은 원색 타일 한 장이 화면에서 제일 밝은 물건이 되면
+     그 순간 다크가 아니다 */
+  --map-tile-tone: saturate(.55) brightness(.62) contrast(1.04);
 
-  /* 겹침 · 그림자 */
-  --scrim:    rgba(4,8,12,.66);
-  --shadow-1: 0 1px 2px rgba(0,0,0,.40);
-  --shadow-2: 0 -1px 0 rgba(0,0,0,.30), 0 14px 36px rgba(0,0,0,.55);
+  /* 겹침 · 그림자 — 다크에서 경계는 그림자가 아니라 면의 밝기가 만든다 */
+  --scrim:    rgba(3,6,10,.68);
+  --shadow-1: 0 1px 3px rgba(0,0,0,.45);
+  --shadow-2: 0 -1px 0 rgba(0,0,0,.30), 0 18px 44px rgba(0,0,0,.58);
 
   /* 권역색 = 노선색 */
   --area-namba:      #E4787B;  /* 오사카 · 미도스지선 레드 */
@@ -512,30 +544,36 @@
     "Noto Sans KR", "Malgun Gothic", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 
+  /* 계단은 **성큼성큼** 밟는다. 비슷한 크기를 여덟 단 늘어놓으면 그건 계단이 아니라
+     경사로다 — 어느 것이 큰지 눈이 못 고른다. 인접 단의 배율을 1.15 아래로 두지 않는다. */
   --fs-2xs: 11px;
   --fs-xs: 12px;
   --fs-sm: 13px;
-  --fs-md: 15px;
+  --fs-md: 15px;   /* 본문 */
   --fs-lg: 17px;
-  --fs-xl: 21px;
-  --fs-2xl: 27px;
-  --fs-3xl: 34px;
+  --fs-xl: 22px;
+  --fs-2xl: 28px;  /* 화면 제목 */
+  --fs-3xl: 36px;
   /* 이 앱의 주인공. 시각·요금처럼 **화면에서 제일 먼저 읽혀야 하는 숫자** 전용이다.
      한 화면에 하나만 쓴다 — 둘이 되는 순간 아무것도 크지 않다. */
-  --fs-display: 42px;
+  --fs-display: 48px;
 
-  --lh-tight: 1.25;
+  --lh-tight: 1.24;
   --lh-base: 1.6;
-  --lh-num: 1.05;   /* 시각·요금처럼 한 줄로 끝나는 숫자 */
+  --lh-num: 1.0;    /* 시각·요금처럼 한 줄로 끝나는 숫자 — 크면 클수록 바짝 붙인다 */
 
+  /* 굵기는 **셋뿐이다.** 400과 700, 그리고 주인공 숫자·화면 제목에만 쓰는 800.
+     500·600을 섞으면 위계가 흐려진다 — 한국의 디자인 시스템(당근 SEED · KRDS)이
+     굵기를 둘로 묶어 두는 이유가 이것이다. 낙차는 굵기 종류가 아니라 크기가 만든다. */
   --fw-normal: 400;
-  --fw-medium: 500;
-  --fw-semibold: 600;
   --fw-bold: 700;
+  --fw-black: 800;
 
-  --ls-tight: -.01em;
-  --ls-num: -.035em;  /* 큰 숫자는 조여야 덩어리로 읽힌다 */
-  --ls-caps: .08em;   /* 역명판 느낌의 소형 대문자 라벨 */
+  --ls-tight: -.02em;   /* 한글 본문 — Pretendard는 조금 조여야 덩어리로 읽힌다 */
+  --ls-title: -.032em;  /* 22px 이상 제목 */
+  --ls-num: -.045em;    /* 큰 숫자는 더 조여야 한 덩어리로 읽힌다 */
+  --ls-caps: .1em;      /* 낙차의 반대쪽 끝 — 아주 작고 아주 벌린 라벨 */
+  --ls-jp: .01em;       /* 일본어 지명은 반대로 **푼다** (일본어 조판 관행) */
 
   /* --- 간격 — 균등하게 쓰지 않는다 -------------------------------------
      한 덩어리 안은 1~3, 덩어리와 덩어리 사이는 5~6, 장(章)이 바뀌면 8~9.
@@ -550,12 +588,13 @@
   --sp-8: 48px;
   --sp-9: 64px;
 
-  /* --- 모서리 — 시각표는 각지다 ----------------------------------------
-     둥근 값을 아무 데나 같은 크기로 돌리지 않는다.
-     2px = 표 안의 작은 조각 · 4px = 누르는 것 · 12px = 화면 위로 올라온 것(시트). */
-  --r-xs: 2px;
-  --r-sm: 4px;
-  --r-lg: 12px;
+  /* --- 모서리 — 값마다 뜻이 있다 ---------------------------------------
+     같은 라운드를 화면 전체에 돌리면 모든 것이 같은 층에 있는 것처럼 보인다.
+     6px = 블록 안의 작은 조각(배지) · 12px = 누르는 것(버튼·입력칸) ·
+     20px = 배경 위에 떠 있는 면(블록·카드·달력·시트) · 999px = 알약(칩). */
+  --r-xs: 6px;
+  --r-sm: 12px;
+  --r-lg: 20px;
   --r-full: 999px;
 
   /* --- 괘선 ------------------------------------------------------------ */
@@ -566,8 +605,8 @@
   --content-max: 720px;
   --nav-h: 58px;
   --safe-b: env(safe-area-inset-bottom, 0px);
-  --tl-time-w: 52px;   /* 타임라인 좌측 시각 열 (숫자를 키웠다) */
-  --tl-rail-w: 22px;   /* 타임라인 노선 레일 열 */
+  --tl-time-w: 60px;   /* 타임라인 좌측 시각 열 — 17px/800 숫자가 안 깨지는 폭 */
+  --tl-rail-w: 24px;   /* 타임라인 노선 레일 열 (레일 6px + 역 점 16px) */
   --tap: 44px;         /* 최소 터치 타깃 */
 
   /* --- 모션 — 늘리지 않는다. 있는 것도 줄이는 방향이다 ----------------- */
@@ -580,8 +619,8 @@
    화면이 커진 만큼 심심해진다 */
 @media (min-width: 720px) {
   :root {
-    --fs-display: 56px;
-    --tl-time-w: 58px;
+    --fs-display: 64px;
+    --tl-time-w: 76px;
   }
 }
 
@@ -714,17 +753,17 @@ h2 {
 
 h3 {
   font-size: var(--fs-lg);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
 }
 
 h4 {
   font-size: var(--fs-md);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
 }
 
 h5, h6 {
   font-size: var(--fs-sm);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
 }
 
 p, ul, ol, dl, dd, figure, blockquote, pre {
@@ -748,7 +787,7 @@ small {
 }
 
 b, strong {
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
 }
 
 code, kbd, samp, pre {
@@ -872,18 +911,24 @@ textarea {
  *
  * ── 이 파일을 관통하는 세 가지 ──────────────────────────────────────────
  *
- * ① **상자가 아니라 괘선.** 인쇄된 시각표는 카드 더미가 아니라 줄로 나뉜 한 장의 표다.
- *   그래서 대부분의 조각에 테두리도 그림자도 없다 — 아래쪽 머리카락 선 하나와 여백이
- *   경계를 만든다. 상자를 쓰는 곳은 **화면 위로 올라온 것**(시트)과 **정말 눌러야 하는
- *   것**(버튼·칩·입력칸)뿐이다.
+ * ① **테두리가 아니라 면.** 예전에는 버튼도 칩도 배지도 입력칸도 전부 얇은 테두리
+ *   상자였다. 그래서 완성된 앱이 아니라 와이어프레임처럼 보였다.
+ *   누를 수 있는 것은 눌러지게 생겨야 한다 — 옅은 면 하나가 테두리 열 개보다
+ *   그 말을 잘 한다. 덩어리는 `--surface` 면 + `--r-lg` 모서리가 묶고,
+ *   그 **안**의 행만 머리카락 괘선이 나눈다.
  *
- * ② **선택은 잉크다.** 고른 것은 액센트 색으로 칠하지 않고 `--ink` 로 칠한다.
- *   액센트는 "누를 수 있다/지금 여기다"라는 **조작 신호**로만 남긴다.
- *   덕분에 화면에서 색이 서로 경쟁하지 않는다.
+ * ② **확정된 것은 朱 면이다.** 주 버튼 · 고른 날짜 · 지금 보는 날 · 눌린 세그먼트 ·
+ *   켜진 필터 칩이 전부 **하나의 조형**을 쓴다 — `--solid` 로 꽉 찬 면.
+ *   화면에서 색이 꽉 찬 자리는 여기뿐이라 시선이 반드시 여기로 온다.
+ *   그리고 색만으로 말하지 않는다 — 면·글자색·굵기가 늘 함께 바뀐다.
  *
- * ③ **권역색은 도해에만.** 타임라인 레일·역 점과 지도만 노선색을 쓴다.
- *   목록 카드·필터 칩·배지는 지역 **이름**으로 말한다 — 17색이 목록을 물들이면
- *   그건 노선도가 아니라 색표다.
+ * ③ **분류색은 tint/solid 쌍.** `--cat-food-weak` 면에 `--cat-food` 글자.
+ *   11px 글자 하나만 물들이면 색이 안 보이고, 면까지 꽉 채우면 배지가 경고처럼 튄다.
+ *   옅은 면 + 진한 글자가 그 사이의 답이다. 상태색(경고·위험·성공)도 같은 짝을 쓴다.
+ *
+ * 권역색 17개는 **장소의 정체성**이다 — 타임라인 레일·역 점·코스 번호·지도·지역 배지의
+ * 좌측 4px. 목록의 3번과 지도의 3번이 같은 색이라 눈이 둘을 바로 잇는다.
+ * 다만 배지 **전체**를 물들이지는 않는다 — 17색이 목록을 뒤덮으면 색표가 된다.
  *
  * ⚠ BUG-004 후속: **color-mix()를 쓰지 않는다.**
  *   예전에는 `background: var(--x)` 한 줄을 앞에 두고 다음 줄에 color-mix를 쓰는
@@ -952,7 +997,7 @@ button.tl-title::after {
    자간을 넓게 벌려 본문과 종류가 다른 글자임을 크기가 아니라 **결**로 알린다 */
 .label {
   font-size: var(--fs-2xs);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--faint);
@@ -1008,8 +1053,8 @@ button.tl-title::after {
 
 .section__title {
   font-size: var(--fs-xl);
-  font-weight: var(--fw-bold);
-  letter-spacing: -.018em;
+  font-weight: var(--fw-black);
+  letter-spacing: var(--ls-title);
   line-height: var(--lh-tight);
 }
 
@@ -1022,6 +1067,9 @@ button.tl-title::after {
 
 /* ============================================================== 1. 버튼 */
 
+/* 기본 버튼은 **테두리가 아니라 면이다.** 예전에는 전부 얇은 테두리 상자였고,
+   그래서 화면이 완성된 앱이 아니라 와이어프레임처럼 보였다. 누를 수 있는 것은
+   눌러지게 생겨야 한다 — 옅은 면 하나가 테두리 열 개보다 그 말을 잘 한다. */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -1029,20 +1077,21 @@ button.tl-title::after {
   gap: var(--sp-2);
   min-height: var(--tap);
   padding: 0 var(--sp-4);
-  border: var(--hair) solid var(--line-strong);
+  border: var(--hair) solid var(--clear);
   border-radius: var(--r-sm);
-  background: var(--clear);
+  background: var(--surface-2);
   color: var(--ink);
   font-size: var(--fs-sm);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
   text-align: center;
   transition: background var(--dur-fast) var(--ease),
               border-color var(--dur-fast) var(--ease);
 }
 
 .btn:hover {
-  background: var(--surface-2);
+  background: var(--surface-3);
   text-decoration: none;
 }
 
@@ -1050,38 +1099,43 @@ button.tl-title::after {
   background: var(--surface-3);
 }
 
-/* 주 액션 — **잉크 면이다. 액센트 면이 아니다.**
-   예전에는 --accent 를 크게 칠했다. 남색 바탕 위의 밝은 하늘색 판이 화면에서 제일
-   시끄러운 물건이 되어, 정작 주인공인 날짜·시각보다 버튼이 먼저 눈에 들어왔다.
-   지금은 고른 항목·눌린 세그먼트·지나온 역과 **같은 언어**를 쓴다 — 확정된 것은 잉크로
-   칠한다. 존재감은 채도가 아니라 명도차에서 온다. 화면당 하나다. */
+/* 주 액션 — **朱 면이다.**
+   예전에는 이 자리를 무채색 잉크로 칠했다. 대비는 충분했지만 화면에 표정이 없었다.
+   회색 버튼은 눌러 달라고 말하지 않는다 — 오히려 꺼져 있는 것처럼 보인다.
+   지금은 고른 날짜·지금 보는 날과 **같은 언어**를 쓴다: 확정된 것은 주홍으로 칠한다.
+   화면당 하나다. 둘이 되는 순간 어느 쪽도 주인공이 아니다. */
 .btn--primary {
   border-color: var(--solid);
   background: var(--solid);
   color: var(--solid-ink);
+  font-size: var(--fs-md);
 }
 
-/* 잉크 면은 더 진해질 곳이 없다 — hover·active는 색이 아니라 **테두리**로 답한다 */
+/* 꽉 찬 면은 더 진해질 곳이 없다 — hover·active는 색이 아니라 **테두리**로 답한다 */
 .btn--primary:hover,
 .btn--primary:active {
   border-color: var(--ink);
   background: var(--solid);
 }
 
-/* 보조 액션 — 테두리만 */
+/* 보조 액션 — 기본 버튼과 같은 면에 **글자만 주홍**이다.
+   옅은 주홍 면(`--accent-weak`)도 써 봤지만 다크에서 어두운 자주색 알약이 되어
+   위험 버튼처럼 읽혔다. 여기서 필요한 신호는 "주 액션 다음"이지 경고가 아니다. */
 .btn--ghost {
-  border-color: var(--accent-line);
+  border-color: var(--clear);
+  background: var(--surface-2);
   color: var(--accent);
 }
 
 .btn--ghost:hover {
-  background: var(--accent-weak);
+  background: var(--surface-3);
   border-color: var(--accent);
 }
 
-/* 테두리 없는 조용한 액션 (시트 닫기, 텍스트 링크형) */
+/* 면도 테두리도 없는 조용한 액션 (시트 닫기, 텍스트 링크형) */
 .btn--quiet {
   border-color: var(--clear);
+  background: var(--clear);
   color: var(--muted);
 }
 
@@ -1092,8 +1146,9 @@ button.tl-title::after {
 }
 
 .btn--sm {
-  min-height: 32px;
+  min-height: 34px;
   padding: 0 var(--sp-3);
+  border-radius: var(--r-full);
   font-size: var(--fs-xs);
 }
 
@@ -1101,8 +1156,8 @@ button.tl-title::after {
 .btn--block {
   display: flex;
   width: 100%;
-  min-height: 52px;
-  font-size: var(--fs-md);
+  min-height: 54px;
+  font-size: var(--fs-lg);
 }
 
 /* 정사각 아이콘 버튼 (테마 토글, 시트 닫기) */
@@ -1141,20 +1196,22 @@ button.tl-title::after {
   flex: 0 0 auto;
 }
 
-/* 칩은 각지다. 알약 모양을 쓰지 않는다 — 승강장 표지판은 둥글지 않다 */
+/* 칩은 **알약이다.** 한 줄로 흐르며 손가락으로 훑는 물건이라 모서리가 각질 이유가 없다.
+   그리고 테두리가 아니라 옅은 면으로 선다 — 필터 줄이 빈 상자 열 개로 보이지 않게. */
 .chip {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-2);
-  min-height: 34px;
-  padding: 0 var(--sp-3);
-  border: var(--hair) solid var(--line);
-  border-radius: var(--r-sm);
-  background: var(--clear);
+  min-height: 36px;
+  padding: 0 var(--sp-4);
+  border: var(--hair) solid var(--clear);
+  border-radius: var(--r-full);
+  background: var(--surface-2);
   color: var(--muted);
   font-size: var(--fs-sm);
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-bold);
   line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
   white-space: nowrap;
   transition: background var(--dur-fast) var(--ease),
               color var(--dur-fast) var(--ease),
@@ -1162,21 +1219,19 @@ button.tl-title::after {
 }
 
 .chip:hover {
-  border-color: var(--line-strong);
+  background: var(--surface-3);
   color: var(--ink);
   text-decoration: none;
 }
 
-/* 선택 상태 = **고른 구간의 띠**. 달력의 여행 기간·고른 목록 행과 같은 언어다.
-   예전에는 칩 하나가 통째로 잉크 면이라, 칩 줄에서 그 하나만 등불처럼 떴다 —
-   다크에서는 특히 심했다(어두운 줄에 흰 알약 하나).
-   지금은 띠를 깔고 테두리를 잉크로 굵혀 고른 것을 알린다.
+/* 선택 상태 = **朱 면**. 주 버튼·고른 날짜·지금 보는 날과 같은 하나의 언어다.
+   예전에는 옅은 띠에 테두리만 굵혔다 — 줄을 훑을 때 어느 것이 켜졌는지 안 보였다.
    aria-pressed="true"를 그대로 셀렉터로 쓴다(상태 이중관리 방지).
-   색만으로 말하지 않는다 — 테두리 굵기와 글자 굵기가 함께 바뀐다. */
+   색만으로 말하지 않는다 — 면·글자색·굵기가 함께 바뀐다. */
 .chip[aria-pressed="true"] {
-  border-color: var(--ink);
-  background: var(--sel-band);
-  color: var(--ink);
+  border-color: var(--solid);
+  background: var(--solid);
+  color: var(--solid-ink);
   font-weight: var(--fw-bold);
 }
 
@@ -1194,43 +1249,42 @@ button.tl-title::after {
   color: var(--faint);
 }
 
-/* 띠 위에서는 개수도 잉크로 적는다 — opacity로 흐리면 대비가 계산을 벗어난다 */
+/* 주홍 면 위에서는 개수도 그 면의 글자색으로 적는다 —
+   opacity로 흐리면 대비가 계산을 벗어난다 */
 .chip[aria-pressed="true"] .chip__count {
-  color: var(--ink);
+  color: var(--solid-ink);
 }
 
 /* -------- 세그먼트 (3개 이하 배타 선택: 먹거리/쇼핑/관광) -------- */
 
-/* 알약 속에 든 알약이 아니다 — **괘선 위에 선 탭**이다.
-   예전에는 둥근 상자 안에 또 둥근 상자가 들어 있어서, 화면의 다른 상자들과 구별되지
-   않는 덩어리가 하나 더 늘어날 뿐이었다. 지금은 상자를 걷어내고 아래 괘선 하나를
-   깐 뒤, 고른 것만 그 괘선을 잉크로 굵게 덮는다.
-   상태는 색만으로 말하지 않는다 — 밑줄(형태) + 굵기 + aria-pressed 셋이 함께 간다. */
+/* **홈 위를 미끄러지는 알약.** 셋 중 하나를 고르는 물건이라 셋이 한 몸으로 보여야 하고,
+   고른 하나는 그 안에서 확실히 떠야 한다. 예전에는 괘선 위의 밑줄이라 셋이 한 몸으로
+   안 읽혔고 고른 것도 눈에 안 띄었다.
+   상태는 색만으로 말하지 않는다 — 면(형태) + 글자색 + aria-pressed 셋이 함께 간다. */
 .seg {
   display: flex;
-  padding: 0;
+  gap: var(--sp-1);
+  padding: var(--sp-1);
   border: 0;
-  border-bottom: var(--hair) solid var(--line);
-  border-radius: 0;
-  background: var(--clear);
+  border-radius: var(--r-full);
+  background: var(--surface-2);
 }
 
 .seg__btn {
   flex: 1 1 0;
   min-width: 0;
-  min-height: var(--tap);
+  min-height: 40px;
   padding: 0 var(--sp-2);
-  border-radius: 0;
-  /* 자기 밑줄을 그룹 괘선 위에 겹쳐 올린다 — 눌리면 그 자리만 잉크로 바뀐다 */
-  border-bottom: var(--rule) solid var(--clear);
-  margin-bottom: calc(var(--hair) * -1);
+  border: 0;
+  border-radius: var(--r-full);
   background: var(--clear);
   color: var(--muted);
   font-size: var(--fs-sm);
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
   text-align: center;
   transition: color var(--dur-fast) var(--ease),
-              border-color var(--dur-fast) var(--ease);
+              background var(--dur-fast) var(--ease);
 }
 
 .seg__btn:hover {
@@ -1238,24 +1292,24 @@ button.tl-title::after {
 }
 
 .seg__btn[aria-pressed="true"] {
-  border-bottom-color: var(--ink);
-  color: var(--ink);
+  background: var(--solid);
+  color: var(--solid-ink);
   font-weight: var(--fw-bold);
 }
 
 /* ============================================================== 3. 카드 */
 
-/* **상자가 아니다.** 사실을 줄맞춰 찍은 표다.
-   예전에는 테두리 한 겹 + 옅은 면이었다. 그 결과 입력칸도 상자, 달력도 상자, 요약도
-   상자라 화면이 똑같이 생긴 둥근 사각형의 더미가 됐다.
-   지금은 위에 굵은 칸선을 긋고 행마다 머리카락 괘선으로 나눈다 — 면도 모서리도 없다. */
+/* **배경 위에 떠 있는 면.** 사실을 줄맞춰 찍되, 그 표를 하나의 블록이 감싼다.
+   예전에는 면 없이 위에 굵은 칸선만 그었다. 정보는 읽혔지만 화면이 종이 한 장처럼
+   납작해서, 무엇이 한 덩어리이고 무엇이 다음 덩어리인지 눈이 먼저 알아채지 못했다.
+   지금은 --surface 면 + --r-lg 모서리로 묶는다. 덩어리는 면이 만들고,
+   그 **안**의 행은 여전히 머리카락 괘선이 나눈다. */
 .card {
   display: block;
-  padding: 0;
+  padding: var(--sp-2) var(--sp-5);
   border: 0;
-  border-top: var(--rule) solid var(--line-strong);
-  border-radius: 0;
-  background: var(--clear);
+  border-radius: var(--r-lg);
+  background: var(--surface);
 }
 
 /* 표의 한 행 — 왼쪽에 작은 라벨, 오른쪽에 값. 행과 행은 괘선으로 나뉜다 */
@@ -1273,6 +1327,11 @@ button.tl-title::after {
   gap: var(--sp-2) var(--sp-3);
   padding: var(--sp-3) 0;
   border-bottom: var(--hair) solid var(--line);
+}
+
+/* 블록 안의 마지막 행은 괘선을 걷는다 — 면의 아래 여백과 겹쳐 두 줄로 보인다 */
+.card > .stack > .row:last-child {
+  border-bottom-color: var(--clear);
 }
 
 .card > .stack > .row > .label {
@@ -1303,19 +1362,19 @@ button.tl-title::after {
 }
 
 .card--tappable:hover {
-  border-color: var(--line-strong);
+  background: var(--surface-2);
   text-decoration: none;
 }
 
 .card--tappable:active {
-  background: var(--surface-2);
+  background: var(--surface-3);
 }
 
-/* 장소 카드 = **표의 한 행**이다.
-   예전에는 둥근 카드에 좌측 4px 권역색 레일이 붙어 있었다. 목록을 스크롤하면 색이
-   무지개처럼 지나갔고, 정작 이름과 요금은 같은 크기로 서로를 밀어냈다.
-   지금은 상자를 없애고 아래 괘선 하나로 나눈다 — 이름은 크게, 요금은 오른쪽 열에
-   줄맞춰 찍는다. 인쇄된 운임표가 원래 그렇다. */
+/* 장소 카드 = **하나의 블록**이다.
+   이름은 크게, 요금은 오른쪽 열에 줄맞춰 찍는다 — 그 안쪽 조판은 운임표 그대로다.
+   달라진 것은 바깥이다: 괘선으로 나뉜 행이 아니라 배경 위에 떠 있는 면이 됐다.
+   좌측 권역색 레일은 여기 붙이지 않는다 — 목록을 스크롤할 때 색이 무지개처럼
+   지나가면 그건 노선도가 아니라 색표다. 권역은 배지 이름으로 말한다. */
 .card--place {
   display: grid;
   /* 좁은 화면에서는 **한 칸**이다. 요금 문자열이 "저녁 1인 2,500엔 (약 23,500원)"처럼
@@ -1323,12 +1382,11 @@ button.tl-title::after {
      그래서 제목은 한 줄을 통째로 쓰고 요금은 다음 줄 오른쪽 끝에 선다. */
   grid-template-columns: minmax(0, 1fr);
   align-items: baseline;
-  gap: var(--sp-1) var(--sp-4);
-  padding: var(--sp-4) 0;
+  gap: var(--sp-2) var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
   border: 0;
-  border-bottom: var(--hair) solid var(--line);
-  border-radius: 0;
-  background: var(--clear);
+  border-radius: var(--r-lg);
+  background: var(--surface);
 }
 
 /* 두 칸이 들어갈 만큼 넓어지면 그때 운임란을 오른쪽에 세운다 */
@@ -1340,26 +1398,28 @@ button.tl-title::after {
 
 .card--place:hover {
   background: var(--surface-2);
-  border-color: var(--line);
 }
 
 .card--place:active {
-  background: var(--surface-2);
+  background: var(--surface-3);
 }
 
 .card__title {
   min-width: 0;
   font-size: var(--fs-lg);
-  font-weight: var(--fw-semibold);
-  letter-spacing: -.015em;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-title);
   line-height: var(--lh-tight);
   color: var(--ink);
 }
 
-/* 현지 표기는 제목에 붙지만 제목이 아니다 — 굵기와 색으로 한 단 물러선다 */
+/* 현지 표기는 제목에 붙지만 제목이 아니다 — 굵기와 색으로 한 단 물러선다.
+   자간은 **한글과 반대로 푼다**(--ls-jp). 일본어 조판은 원래 자간을 벌리고,
+   한글용 음수 자간을 그대로 걸면 가나·한자가 서로 붙어 답답해 보인다. */
 .card__sub {
   font-size: var(--fs-xs);
   font-weight: var(--fw-normal);
+  letter-spacing: var(--ls-jp);
   color: var(--faint);
 }
 
@@ -1417,15 +1477,18 @@ button.tl-title::after {
 
 .price__jpy {
   font-size: var(--fs-md);
-  font-weight: var(--fw-semibold);
-  letter-spacing: -.02em;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-num);
   color: var(--ink);
 }
 
-/* 목록 한 행의 요금은 이 화면에서 두 번째로 큰 숫자다 */
+/* 목록 한 행의 요금은 **이름 다음**이다. 예전에 한 단 키워 뒀더니 이름과 같은
+   무게로 서서 어느 쪽을 먼저 읽어야 할지 눈이 못 골랐다 — 위계는 하나여야 한다 */
 .card--place .price__jpy {
-  font-size: var(--fs-lg);
+  font-size: var(--fs-md);
+  color: var(--muted);
 }
+
 
 .price--free .price__jpy {
   color: var(--ok);
@@ -1450,19 +1513,24 @@ button.tl-title::after {
 
 /* ============================================================== 5. 배지 */
 
-/* 배지는 작은 표지판이다. 기본은 무채색 — 색은 **분류(카테고리)에만** 허락한다 */
+/* 배지는 작은 표지판이다. **tint/solid 쌍** — 옅은 면에 진한 같은 계열 글자.
+   예전에는 빈 테두리에 글자색만 물들였다. 11px 글자 하나로는 색이 보이지 않았고,
+   테두리만 남아 화면이 빈 상자로 가득 찼다.
+   면을 깔면 같은 색을 여섯 가지 써도 시끄럽지 않다 — 한국 앱들이 색을 많이
+   쓰면서도 정돈돼 보이는 이유가 이 방식이다. */
 .badge {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-1);
-  padding: 1px var(--sp-2);
-  border: var(--hair) solid var(--line);
+  padding: 2px var(--sp-2);
+  border: var(--hair) solid var(--clear);
   border-radius: var(--r-xs);
-  background: var(--clear);
+  background: var(--surface-2);
   color: var(--muted);
   font-size: var(--fs-2xs);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   line-height: 1.6;
+  letter-spacing: var(--ls-tight);
   white-space: nowrap;
 }
 
@@ -1472,24 +1540,29 @@ button.tl-title::after {
 .badge--korean,
 .badge--local,
 .badge--both {
-  border-color: var(--line-strong);
+  background: var(--surface-3);
   color: var(--ink);
 }
 
-/* 분류 — 화면에서 색을 쓰는 자리는 여기다. 테두리는 무채색으로 두고 **글자만** 물들인다.
-   테두리까지 칠하면 작은 배지가 경고 표시처럼 튄다 */
-.badge--food  { color: var(--cat-food); }
-.badge--shop  { color: var(--cat-shop); }
-.badge--sight { color: var(--cat-sight); }
+/* 분류 — 옅은 면 + 진한 글자. 액센트(朱)와 겹치지 않는 세 색을 골라 뒀다 */
+.badge--food  { background: var(--cat-food-weak);  color: var(--cat-food); }
+.badge--shop  { background: var(--cat-shop-weak);  color: var(--cat-shop); }
+.badge--sight { background: var(--cat-sight-weak); color: var(--cat-sight); }
 
-/* 지역 배지 — 좌측 노선색 레일을 뺐다(§2 참조). 이름이 식별자다 */
+/* 지역 배지 — 면은 무채색으로 두되 **좌측 4px 만 노선색**이다.
+   목록에서 지역을 색으로 알아보게 하면서도(지도와 같은 색말) 배지 전체를
+   물들이지 않아 17색이 목록을 뒤덮지 않는다. */
 .badge--area {
+  padding-left: var(--sp-2);
+  border-left: 4px solid var(--area, var(--line-strong));
+  border-radius: 0 var(--r-xs) var(--r-xs) 0;
   color: var(--ink);
 }
 
 /* 요금 스냅샷 시점 ("2026년 3분기 기준") — 지우지 않되 가장 조용하게 */
 .badge--asof {
   border-color: var(--clear);
+  background: var(--clear);
   padding-left: 0;
   color: var(--faint);
   font-weight: var(--fw-normal);
@@ -1497,14 +1570,15 @@ button.tl-title::after {
 
 /* asOf가 6개월 이상 지난 항목 — 회색 "확인 필요" (PLAN §6.1) */
 .badge--stale {
-  background: var(--surface-2);
+  background: var(--surface-3);
   border-color: var(--line-strong);
   color: var(--muted);
 }
 
-.badge--warn   { border-color: var(--warn);   color: var(--warn);   background: var(--warn-weak); }
-.badge--danger { border-color: var(--danger); color: var(--danger); background: var(--danger-weak); }
-.badge--ok     { border-color: var(--ok);     color: var(--ok);     background: var(--ok-weak); }
+/* 상태 배지도 같은 tint/solid 쌍이다 — 테두리는 걷고 면과 글자로만 말한다 */
+.badge--warn   { background: var(--warn-weak);   color: var(--warn); }
+.badge--danger { background: var(--danger-weak); color: var(--danger); }
+.badge--ok     { background: var(--ok-weak);     color: var(--ok); }
 
 /* ==================================================== 6. 타임라인 스톱 */
 
@@ -1529,6 +1603,11 @@ button.tl-title::after {
   border-bottom: var(--hair) solid var(--line);
 }
 
+/* 이름은 한 줄을 통째로 쓸 수 있어야 한다 */
+.tl-head > .tl-title {
+  flex: 1 1 auto;
+}
+
 .tl > :last-child .tl-stop,
 .tl > .tl-stop:last-child {
   border-bottom: 0;
@@ -1547,11 +1626,16 @@ button.tl-title::after {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
   font-size: var(--fs-lg);
-  font-weight: var(--fw-bold);
-  letter-spacing: -.03em;
+  font-weight: var(--fw-black);
+  letter-spacing: var(--ls-num);
   line-height: var(--lh-num);
   text-align: right;
   color: var(--ink);
+}
+
+/* 넓어지면 한 단 키운다 — 좁은 화면에서 "13:20"이 두 줄로 쪼개지는 것이 먼저다 */
+@media (min-width: 560px) {
+  .tl-time { font-size: var(--fs-xl); }
 }
 
 /* 끝나는 시각은 시작 시각의 그림자다 — 한참 작고 흐리게 */
@@ -1564,7 +1648,9 @@ button.tl-title::after {
   color: var(--faint);
 }
 
-/* 가운데 노선 레일 */
+/* 가운데 노선 레일 — **굵다.** 이건 흐릿한 장식선이 아니라 노선도의 선이다.
+   앱이 가진 자산 중 색을 쓰는 것은 이 17개 노선색뿐이고, 2px로 그리면 그 자산이
+   화면에 없는 것이나 같다. 6px로 긋고 끝을 둥글게 말아 실제 노선도처럼 만든다. */
 .tl-rail {
   position: relative;
   align-self: stretch;
@@ -1577,21 +1663,22 @@ button.tl-title::after {
   top: 0;
   bottom: 0;
   left: 50%;
-  width: var(--rule);
-  margin-left: -1px;
+  width: 6px;
+  margin-left: -3px;
+  border-radius: 3px;
   background: var(--area, var(--rail));
 }
 
-/* 역 점 */
+/* 역 점 — 레일보다 크고, 가운데를 바탕색으로 뚫는다 (실제 노선도의 역 표기) */
 .tl-rail::after {
   content: "";
   position: absolute;
-  top: 12px;
+  top: 11px;
   left: 50%;
-  width: 12px;
-  height: 12px;
-  margin-left: -6px;
-  border: 3px solid var(--area, var(--rail));
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  border: 5px solid var(--area, var(--rail));
   border-radius: var(--r-full);
   background: var(--dot-ink);
   box-sizing: border-box;
@@ -1608,15 +1695,22 @@ button.tl-title::after {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--sp-3);
+  gap: var(--sp-2) var(--sp-3);
   min-width: 0;
+  flex-wrap: wrap;
+}
+
+/* 이름이 길면 요금이 다음 줄 오른쪽 끝으로 내려간다 —
+   좁은 화면에서 둘이 한 줄을 다투면 이름이 음절 단위로 쪼개진다 */
+.tl-head > .price {
+  margin-left: auto;
 }
 
 .tl-title {
   min-width: 0;
   font-size: var(--fs-lg);
-  font-weight: var(--fw-semibold);
-  letter-spacing: -.015em;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-title);
   line-height: var(--lh-tight);
   color: var(--ink);
 }
@@ -1637,20 +1731,28 @@ button.tl-title::after {
 }
 
 /* 코스 번호 — kind === 'stop' 에만 붙인다 (BUG-005).
-   권역색을 빼고 무채색으로 돌렸다. 색은 레일과 점이 이미 말하고 있다 */
+   **지도의 번호 마커(.map-stop__dot)와 똑같은 물건**이다 — 노선색 테두리에 속은 비고,
+   숫자는 잉크. 목록의 3번과 지도의 3번이 같은 모양·같은 색이라 눈이 둘을 바로 잇는다.
+   레일의 역 점(.tl-rail::after)도 같은 조형이라 이 화면 안에서도 말이 하나다.
+
+   ⚠ 노선색으로 **꽉 채우지 않는 이유**가 있다. 17색은 명도 폭이 넓어서
+   (라이트의 시부야 연두부터 한신 남색까지) 그 위에 얹을 글자색을 하나로 고를 수 없다 —
+   흰 글자는 연두 위에서 3.69:1, 검은 글자는 남색 위에서 2.3:1로 둘 다 4.5:1을 못 넘는다.
+   속을 비우면 숫자는 언제나 --ink on --surface 라 대비가 계산에서 벗어나지 않는다. */
 .tl-num {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 20px;
-  height: 20px;
+  min-width: 24px;
+  height: 24px;
   padding: 0 4px;
-  border: var(--hair) solid var(--line-strong);
-  border-radius: var(--r-xs);
+  border: 3px solid var(--area, var(--rail));
+  border-radius: var(--r-full);
+  background: var(--surface);
   font-variant-numeric: tabular-nums;
-  font-size: var(--fs-2xs);
-  font-weight: var(--fw-bold);
-  color: var(--muted);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-black);
+  color: var(--ink);
 }
 
 .tl-title .tl-num {
@@ -1681,7 +1783,7 @@ button.tl-title::after {
 
 .tl-stop--move .tl-title {
   font-size: var(--fs-sm);
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-bold);
   letter-spacing: var(--ls-tight);
   color: var(--muted);
 }
@@ -1702,7 +1804,7 @@ button.tl-title::after {
 
 .tl-stop--locker .tl-title {
   font-size: var(--fs-sm);
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-bold);
   color: var(--muted);
 }
 
@@ -1838,23 +1940,22 @@ button.tl-title::after {
 
 /* ========================================================= 8. 검색 입력 */
 
-/* 검색칸도 상자가 아니다 — `.field__input`과 같은 언어의 **밑줄 한 줄**이다.
-   좌우 padding이 0이라 아이콘과 글자가 본문과 같은 세로선에서 시작한다. */
+/* 검색칸도 `.field__input`과 같은 언어다 — **눌러서 들어가는 면**.
+   다만 알약이다. 검색은 목록 위를 훑는 물건이라 각질 이유가 없다. */
 .search {
   display: flex;
   align-items: center;
   gap: var(--sp-2);
-  min-height: var(--tap);
-  padding: 0;
-  border: 0;
-  border-bottom: var(--rule) solid var(--line-strong);
-  border-radius: 0;
-  background: var(--clear);
+  min-height: 52px;
+  padding: 0 var(--sp-4);
+  border: var(--rule) solid var(--clear);
+  border-radius: var(--r-full);
+  background: var(--surface);
   transition: border-color var(--dur-fast) var(--ease);
 }
 
 .search:focus-within {
-  border-bottom-color: var(--ink);
+  border-color: var(--accent);
 }
 
 .search__icon {
@@ -1895,27 +1996,27 @@ button.tl-title::after {
 .field__label {
   margin-bottom: calc(var(--sp-1) * -1);
   font-size: var(--fs-2xs);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--faint);
 }
 
-/* 입력은 상자가 아니라 **괘선 위에 적는 값**이다.
-   테두리 네 겹 · 옅은 면 · 둥근 모서리를 전부 걷어내고 밑줄 하나만 남겼다.
-   왼쪽 padding도 0이다 — 값이 본문·제목과 같은 세로선에서 시작해야 줄이 맞는다. */
+/* 입력칸은 **눌러서 들어가는 면**이다.
+   예전에는 밑줄 하나만 남긴 괘선이었다. 조판은 깔끔했지만 "여기를 눌러 적으세요"라는
+   말을 하지 못했고, 화면이 앱이 아니라 인쇄된 서식처럼 보였다.
+   지금은 --surface 면에 --r-sm 모서리 — 버튼과 같은 문법이다. */
 .field__input,
 .field__select {
   width: 100%;
-  min-height: var(--tap);
-  padding: 0;
-  border: 0;
-  border-bottom: var(--rule) solid var(--line-strong);
-  border-radius: 0;
-  background: var(--clear);
+  min-height: 54px;
+  padding: 0 var(--sp-4);
+  border: var(--rule) solid var(--clear);
+  border-radius: var(--r-sm);
+  background: var(--surface);
   color: var(--ink);
   font-size: var(--fs-lg);
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-bold);
   font-variant-numeric: tabular-nums;
   transition: border-color var(--dur-fast) var(--ease);
 }
@@ -1925,21 +2026,21 @@ button.tl-title::after {
 .field__select {
   appearance: none;
   -webkit-appearance: none;
-  padding-right: var(--sp-5);
+  padding-right: var(--sp-6);
   background-image:
     linear-gradient(45deg, transparent 50%, currentColor 50%),
     linear-gradient(135deg, currentColor 50%, transparent 50%);
   background-position:
-    calc(100% - 9px) calc(50% - 1px),
-    calc(100% - 4px) calc(50% - 1px);
+    calc(100% - 21px) calc(50% - 1px),
+    calc(100% - 16px) calc(50% - 1px);
   background-size: 5px 5px, 5px 5px;
   background-repeat: no-repeat;
 }
 
-/* 포커스는 밑줄이 잉크로 굵어져 답한다 (링은 base.css가 따로 그린다) */
+/* 포커스는 테두리가 주홍으로 켜져 답한다 (링은 base.css가 따로 그린다) */
 .field__input:focus,
 .field__select:focus {
-  border-bottom-color: var(--ink);
+  border-color: var(--accent);
 }
 
 .field__hint {
@@ -1950,34 +2051,34 @@ button.tl-title::after {
 
 .field__error {
   font-size: var(--fs-xs);
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-bold);
   color: var(--danger);
 }
 
 .field.is-invalid .field__input,
 .field.is-invalid .field__select {
-  border-bottom-color: var(--danger);
+  border-color: var(--danger);
 }
 
-/* 범위 슬라이더 (취향 비중) — 막대 셋이 나란히 서는 자리라 액센트로 칠하면
-   그 세 줄이 화면에서 제일 밝은 물건이 된다. 잉크로 칠한다. */
+/* 범위 슬라이더 (취향 비중) — 사용자가 직접 정한 값이라 확정된 것과 같은 언어를 쓴다.
+   막대 셋이 나란히 서지만 주 버튼은 이 화면에 하나뿐이라 서로 다투지 않는다. */
 .field__range {
   width: 100%;
   min-height: var(--tap);
-  accent-color: var(--ink);
+  accent-color: var(--solid);
 }
 
 /* -------- 달력 (날짜 범위 선택) --------
-   시각표의 운행 캘린더다. 상자에 담지 않는다 — 위에 굵은 칸선을 긋고 그 아래에 펼친다.
+   온보딩에서 제일 오래 머무는 화면이고, 여행이 실제로 정해지는 자리다.
+   그래서 배경에 흩뿌리지 않고 **하나의 블록**에 담는다 — 이 앱에서 가장 큰 면이다.
    날짜 칸은 전부 44px(--tap) 이상이다. */
 .cal {
   display: grid;
-  gap: var(--sp-3);
-  padding: var(--sp-3) 0 0;
+  gap: var(--sp-4);
+  padding: var(--sp-5) var(--sp-4);
   border: 0;
-  border-top: var(--rule) solid var(--line-strong);
-  border-radius: 0;
-  background: var(--clear);
+  border-radius: var(--r-lg);
+  background: var(--surface);
   min-width: 0;
 }
 
@@ -1989,8 +2090,9 @@ button.tl-title::after {
 }
 
 .cal__title {
-  font-size: var(--fs-md);
-  font-weight: var(--fw-semibold);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--ls-title);
   color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
@@ -2037,7 +2139,8 @@ button.tl-title::after {
   background: var(--clear);
   color: var(--ink);
   /* 날짜는 이 화면의 주인공 중 하나다 — 44px 칸 안에서 13px는 너무 작았다 */
-  font-size: var(--fs-md);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
   font-variant-numeric: tabular-nums;
   cursor: pointer;
 }
@@ -2065,26 +2168,28 @@ button.tl-title::after {
   color: var(--ink);
 }
 
-/* 띠의 양 끝 — 도착한 날과 떠나는 날.
-   **색을 바꾸지 않고** 잉크 괘선과 굵기로 끊는다 (색만으로 정보를 전달하지 않는다).
-   상태의 정본은 aria-pressed 이고, 달력 위 안내문이 날짜를 말로도 적는다. */
+/* 띠의 양 끝 — 도착한 날과 떠나는 날. **주홍 면**이다.
+   띠(옅은 주홍)와 끝(진한 주홍)이 같은 계열이라 하나의 구간으로 읽히면서도
+   어디서 시작해 어디서 끝나는지가 분명하다. 굵기도 함께 바뀐다
+   (색만으로 정보를 전달하지 않는다 — 상태의 정본은 aria-pressed 이고,
+   달력 위 안내문 .cal__hint 가 고른 날짜를 말로도 적는다). */
 .cal__day[aria-pressed="true"] {
-  font-weight: var(--fw-bold);
-  box-shadow: inset var(--rule) 0 0 var(--ink),
-              inset calc(var(--rule) * -1) 0 0 var(--ink);
+  background: var(--solid);
+  color: var(--solid-ink);
+  font-weight: var(--fw-black);
 }
 
-/* :has()가 되는 곳에서는 띠 **안쪽**을 향한 괘선을 지워 바깥쪽 끝만 남긴다.
-   안 되는 브라우저는 위 규칙대로 양쪽에 괘선이 남는다 — 띠는 그대로 이어진다. */
+/* 양 끝만 모서리를 만다 — 띠가 알약 하나로 이어져 보인다.
+   :has()가 없는 브라우저에서는 양 끝 다 둥글게 남는다 (띠는 그대로 이어진다). */
 @supports selector(:has(*)) {
   .cal__day[aria-pressed="true"]:has(+ .cal__day.is-in),
   .cal__day[aria-pressed="true"]:has(+ .cal__day[aria-pressed="true"]) {
-    box-shadow: inset var(--rule) 0 0 var(--ink);
+    border-radius: var(--r-full) 0 0 var(--r-full);
   }
 
   .cal__day.is-in + .cal__day[aria-pressed="true"],
   .cal__day[aria-pressed="true"] + .cal__day[aria-pressed="true"] {
-    box-shadow: inset calc(var(--rule) * -1) 0 0 var(--ink);
+    border-radius: 0 var(--r-full) var(--r-full) 0;
   }
 }
 
@@ -2092,12 +2197,13 @@ button.tl-title::after {
    `− [12:35] +` 스텝퍼와 프리셋 칩(.timepick)은 없앴다. 항공편 시각은 고르는 값이 아니라
    옮겨 적는 값이라, 눌러서 맞추다 잘못 멈추면 그대로 틀린 값이 굳는다.
    지금은 `.field > input[type="time"]` 한 칸뿐이라 전용 클래스가 필요 없다 —
-   숫자만 크게 키워 옮겨 적은 값을 눈으로 확인하기 쉽게 한다. */
+   숫자만 크게 키워 옮겨 적은 값을 눈으로 확인하기 쉽게 한다.
    이 화면의 주인공은 "언제 도착해서 언제 떠나는가"다. 그러니 시각이 화면에서 제일 큰
    글자여야 한다 — 라벨은 역명판처럼 작게 눕고, 값만 크게 선다. */
 .field__input[type="time"] {
+  min-height: 62px;
   font-size: var(--fs-2xl);
-  font-weight: var(--fw-bold);
+  font-weight: var(--fw-black);
   letter-spacing: var(--ls-num);
   line-height: var(--lh-num);
 }
@@ -2129,19 +2235,24 @@ button.tl-title::after {
 .notice {
   display: grid;
   gap: var(--sp-1);
-  padding: var(--sp-1) 0 var(--sp-1) var(--sp-3);
-  border-left: var(--rule) solid var(--line-strong);
+  padding: var(--sp-3) var(--sp-4);
+  border-left: 4px solid var(--line-strong);
+  border-radius: 0 var(--r-xs) var(--r-xs) 0;
+  background: var(--surface-2);
   font-size: var(--fs-sm);
   color: var(--muted);
 }
 
 .notice__title {
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   color: var(--ink);
 }
 
+/* 상태는 **좌측 괘선 + 면 + 제목 글자색** 셋이 함께 말한다.
+   색만으로 전달하지 않는다 — 제목 문구 자체가 이미 무슨 일인지 적고 있다. */
 .notice--warn {
   border-left-color: var(--warn);
+  background: var(--warn-weak);
 }
 
 .notice--warn .notice__title {
@@ -2150,6 +2261,7 @@ button.tl-title::after {
 
 .notice--danger {
   border-left-color: var(--danger);
+  background: var(--danger-weak);
 }
 
 .notice--danger .notice__title {
@@ -2169,15 +2281,16 @@ button.tl-title::after {
 /* 이모지 대신 노선도 조각 같은 마커 하나 — 끊긴 선로다 */
 .empty::before {
   content: "";
-  width: 28px;
-  height: var(--rule);
+  width: 32px;
+  height: 6px;
   margin-bottom: var(--sp-3);
+  border-radius: 3px;
   background: var(--line-strong);
 }
 
 .empty__title {
   font-size: var(--fs-lg);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   color: var(--ink);
 }
 
@@ -2202,21 +2315,23 @@ button.tl-title::after {
 .meter__value {
   font-variant-numeric: tabular-nums;
   font-size: var(--fs-lg);
-  font-weight: var(--fw-bold);
-  letter-spacing: -.02em;
+  font-weight: var(--fw-black);
+  letter-spacing: var(--ls-num);
   line-height: var(--lh-num);
   color: var(--ink);
 }
 
 .meter__track {
-  height: 3px;
+  height: 6px;
+  border-radius: 3px;
   background: var(--surface-3);
   overflow: hidden;
 }
 
 .meter__fill {
   height: 100%;
-  background: var(--ink);
+  border-radius: 3px;
+  background: var(--solid);
   transition: width var(--dur-base) var(--ease);
 }
 
@@ -2274,7 +2389,7 @@ button.tl-title::after {
 
 .vg-zone__name {
   font-size: var(--fs-2xs);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   line-height: var(--lh-tight);
@@ -2313,7 +2428,7 @@ button.tl-title::after {
 .vg-att__name {
   min-width: 0;
   font-size: var(--fs-md);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   line-height: var(--lh-tight);
   color: var(--ink);
 }
@@ -2423,7 +2538,7 @@ button.tl-title::after {
 }
 
 .rt-leg__line {
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   color: var(--rt-line, var(--line-default));
 }
 
@@ -2505,20 +2620,21 @@ button.tl-title::after {
   min-width: 0;
 }
 
-/* 노선 레일 조각 — 로고 대신 쓰는 조형 요소. 화면에서 액센트가 늘 켜져 있는 유일한 자리다 */
+/* 노선 레일 조각 — 로고 대신 쓰는 조형 요소. 주홍이 늘 켜져 있는 유일한 자리다 */
 .shell-mark {
-  width: 3px;
-  height: 16px;
+  width: 5px;
+  height: 18px;
   flex: 0 0 auto;
   align-self: center;
+  border-radius: 3px;
   background: var(--accent);
 }
 
 .shell-title {
   min-width: 0;
   font-size: var(--fs-md);
-  font-weight: var(--fw-bold);
-  letter-spacing: -.02em;
+  font-weight: var(--fw-black);
+  letter-spacing: var(--ls-title);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2527,7 +2643,7 @@ button.tl-title::after {
 .shell-sub {
   flex: 0 0 auto;
   font-size: var(--fs-2xs);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--faint);
@@ -2542,7 +2658,7 @@ button.tl-title::after {
 
 .shell-theme {
   font-size: var(--fs-2xs);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   letter-spacing: var(--ls-caps);
   color: var(--muted);
 }
@@ -2578,8 +2694,8 @@ button.tl-title::after {
   display: flex;
   height: calc(var(--nav-h) + var(--safe-b));
   padding-bottom: var(--safe-b);
-  background: var(--bg);
-  border-top: var(--hair) solid var(--line-strong);
+  background: var(--surface);
+  border-top: var(--hair) solid var(--line);
   -webkit-backdrop-filter: saturate(180%) blur(12px);
   backdrop-filter: saturate(180%) blur(12px);
 }
@@ -2595,14 +2711,16 @@ button.tl-title::after {
   padding: 0 var(--sp-1);
   color: var(--muted);
   font-size: var(--fs-xs);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   transition: color var(--dur-fast) var(--ease);
 }
 
-/* 활성 탭 위에 얹히는 노선 표시 막대 — 액센트를 쓰는 두 번째 자리("지금 여기") */
+/* 활성 탭 위에 얹히는 노선 표시 막대 — 주홍이 켜지는 자리("지금 여기").
+   색만으로 말하지 않는다: 막대(형태) + 글자색 + aria-selected 셋이 함께 간다. */
 .shell-tab__mark {
-  width: 20px;
-  height: 3px;
+  width: 22px;
+  height: 4px;
+  border-radius: 2px;
   background: var(--clear);
   transition: background var(--dur-fast) var(--ease);
 }
@@ -2690,23 +2808,27 @@ button.tl-title::after {
   display: none;
 }
 
-/* 지나온 역·지금 역은 **잉크**로 찍는다. 액센트는 조작에만 쓴다 */
+/* 지나온 역·지금 역은 **주홍**으로 찍는다 — 여기까지 왔다는 표시다.
+   지금 역은 속을 비워(테두리만) 지나온 역과 형태로도 갈린다. */
 .ob-step.is-done::before {
-  border-color: var(--ink);
-  background: var(--ink);
+  border-color: var(--solid);
+  background: var(--solid);
 }
 
 .ob-step[aria-current="step"]::before {
-  border-color: var(--ink);
+  width: 14px;
+  height: 14px;
+  border-color: var(--solid);
+  background: var(--bg);
 }
 
 .ob-step[aria-current="step"] {
   color: var(--ink);
-  font-weight: var(--fw-bold);
+  font-weight: var(--fw-black);
 }
 
 .ob-step.is-done::after {
-  background: var(--line-strong);
+  background: var(--solid);
 }
 
 /* 스텝을 넘길 때 이 상자로 포커스를 옮긴다 — 스크린리더가 새 질문을 읽게 하려는 것이다.
@@ -2731,79 +2853,83 @@ button.tl-title::after {
   min-width: 0;
 }
 
-/* 온보딩은 질문 화면이다 — 질문이 화면을 끌어야 한다 */
+/* 온보딩은 질문 화면이다 — 질문이 화면을 끌어야 한다.
+   28px/800 에 자간을 조인다. 굵기 종류를 늘리지 않고 **크기의 낙차**로 세운다:
+   제목 28 · 본문 15 · 라벨 11. 그 사이를 채우는 단은 두지 않는다. */
 .ob-title {
   font-size: var(--fs-2xl);
-  font-weight: var(--fw-bold);
-  letter-spacing: -.028em;
-  line-height: 1.2;
+  font-weight: var(--fw-black);
+  letter-spacing: var(--ls-title);
+  line-height: 1.24;
 }
 
 /* 제목 바로 다음 줄이라 위 여백을 당겨 한 덩어리로 묶는다 */
 .ob-lede {
   margin-top: calc(var(--sp-5) * -1 + var(--sp-2));
   max-width: 42ch;
-  font-size: var(--fs-sm);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
   color: var(--muted);
 }
 
-/* 고르는 목록 — **균일한 카드 격자가 아니라 표의 행이다.**
-   예전에는 140px짜리 둥근 상자가 격자로 깔렸다. 어떤 화면이든 같은 크기의 사각형이
-   같은 간격으로 반복돼서, 내용이 달라도 화면이 늘 똑같아 보였다.
-   지금은 상자를 걷고 괘선으로만 나눈다 — 행의 높이는 내용이 정한다. */
+/* 고르는 목록 — 균일한 카드 격자도, 괘선으로만 나뉜 행도 아니다.
+   격자는 화면을 늘 똑같아 보이게 하고, 맨 행은 누를 수 있다는 말을 못 한다.
+   **높이는 내용이 정하되 각자 하나의 면**이다 — 세로로 쌓인 블록. */
 .ob-choices {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 0;
-  border-top: var(--hair) solid var(--line);
+  gap: var(--sp-2);
 }
 
 .ob-choice {
   display: grid;
-  gap: 2px;
+  gap: var(--sp-1);
   align-content: center;
-  min-height: var(--tap);
-  padding: var(--sp-3);
-  border: 0;
-  border-bottom: var(--hair) solid var(--line);
-  border-radius: 0;
-  background: var(--clear);
+  min-height: 60px;
+  padding: var(--sp-4) var(--sp-5);
+  border: var(--rule) solid var(--clear);
+  border-radius: var(--r-lg);
+  background: var(--surface);
   text-align: left;
   min-width: 0;
-  transition: background var(--dur-fast) var(--ease);
+  transition: background var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease);
 }
 
 .ob-choice:hover {
   background: var(--surface-2);
 }
 
-/* 고른 것 — 달력의 고른 구간과 **같은 언어**다. 띠 하나에 왼쪽 잉크 괘선.
-   예전에는 행 전체가 밝은 잉크 면이라 목록에서 그 한 줄만 등불처럼 떴다.
-   상태는 색만으로 말하지 않는다 — 괘선(형태) + 굵기 + aria-pressed 셋이 함께 간다. */
+/* 고른 것 — 옅은 주홍 면 + 진한 주홍 테두리 (tint/solid 쌍).
+   행 전체를 꽉 찬 주홍으로 칠하면 목록에서 그 한 줄만 등불처럼 떠서
+   나머지 선택지가 안 보인다. 여기서는 tint 쪽을 쓴다.
+   상태는 색만으로 말하지 않는다 — 테두리(형태) + 굵기 + aria-pressed 셋이 함께 간다. */
 .ob-choice[aria-pressed="true"] {
-  background: var(--sel-band);
-  box-shadow: inset var(--sp-1) 0 0 var(--ink);
+  background: var(--accent-weak);
+  border-color: var(--accent-line);
 }
 
 .ob-choice__name {
-  font-size: var(--fs-md);
-  font-weight: var(--fw-semibold);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
   color: var(--ink);
 }
 
 .ob-choice__meta {
-  font-size: var(--fs-xs);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-base);
   color: var(--muted);
 }
 
-/* 띠 위에서는 둘 다 잉크로 적는다 — 위계는 색이 아니라 **크기와 굵기**가 만든다 */
+/* 옅은 주홍 면 위에서도 위계는 그대로 — 크기와 굵기가 만든다 */
 .ob-choice[aria-pressed="true"] .ob-choice__name {
   color: var(--ink);
-  font-weight: var(--fw-bold);
+  font-weight: var(--fw-black);
 }
 
 .ob-choice[aria-pressed="true"] .ob-choice__meta {
-  color: var(--ink);
+  color: var(--muted);
 }
 
 /* 항공 스케줄 입력 (공항 select + datetime-local) */
@@ -2827,9 +2953,9 @@ button.tl-title::after {
 
 .ob-weight__value {
   font-variant-numeric: tabular-nums;
-  font-size: var(--fs-md);
-  font-weight: var(--fw-bold);
-  letter-spacing: -.02em;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--ls-num);
   text-align: right;
   color: var(--ink);
 }
@@ -2845,8 +2971,8 @@ button.tl-title::after {
   max-width: var(--content-max);
   margin: 0 auto;
   padding: var(--sp-3) var(--sp-4) calc(var(--sp-3) + var(--safe-b));
-  background: var(--bg);
-  border-top: var(--hair) solid var(--line-strong);
+  background: var(--surface);
+  border-top: var(--hair) solid var(--line);
 }
 
 /* 같은 크기의 큰 상자 둘이 아니다. **되돌아가는 길은 조용한 글자, 나아가는 길만 면이다.**
@@ -2869,6 +2995,7 @@ button.tl-title::after {
   min-width: 0;
   padding: 0 var(--sp-4);
   border-color: var(--clear);
+  background: var(--clear);
   color: var(--muted);
 }
 
@@ -2890,32 +3017,38 @@ button.tl-title::after {
   padding: 0 var(--sp-4);
 }
 
+/* 날짜 칩 = **그날의 노선 표찰**. 위쪽에 그날 주로 다니는 권역의 노선색 막대를 얹는다 —
+   Day 2와 Day 3이 색부터 다르니 "다른 동네에 가는 날"이 목록에서 바로 보인다.
+   그 색은 아래 타임라인의 레일·역 점, 지도의 번호 마커와 **같은 색말**이다.
+   (data-area 는 viewItinerary가 day.areas[0]로 찍는다. 없으면 --rail로 떨어진다) */
 .itin-day {
   display: grid;
-  gap: 1px;
-  min-width: 92px;
-  padding: var(--sp-2) var(--sp-3);
-  border: var(--hair) solid var(--line);
-  border-radius: var(--r-sm);
-  background: var(--clear);
+  gap: 2px;
+  min-width: 104px;
+  padding: var(--sp-3) var(--sp-4);
+  border: var(--rule) solid var(--clear);
+  border-top: 5px solid var(--area, var(--rail));
+  border-radius: var(--r-xs) var(--r-xs) var(--r-sm) var(--r-sm);
+  background: var(--surface);
   text-align: left;
+  transition: background var(--dur-fast) var(--ease);
 }
 
 .itin-day:hover {
-  border-color: var(--line-strong);
+  background: var(--surface-2);
 }
 
 .itin-day__label {
   font-size: var(--fs-2xs);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-black);
   letter-spacing: var(--ls-caps);
   color: var(--faint);
 }
 
 .itin-day__date {
-  font-size: var(--fs-md);
-  font-weight: var(--fw-bold);
-  letter-spacing: -.02em;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-black);
+  letter-spacing: var(--ls-title);
   color: var(--ink);
 }
 
@@ -2925,21 +3058,23 @@ button.tl-title::after {
   color: var(--muted);
 }
 
-/* 고른 날은 **잉크 블록**이다. 이 앱에서 가장 대담한 조형이고, 그래서 여기 하나뿐이다 —
-   행선 표시기의 검은 판때기다. 예전의 청록색 슬래브를 대신한다 */
+/* 지금 보는 날은 **朱 면**이다 — 주 버튼·고른 날짜와 같은 하나의 언어.
+   노선색 막대는 그대로 남아 "어느 날인지"와 "어디에 가는지"를 동시에 말한다.
+   색만으로 말하지 않는다: 면 + 글자색 + aria-pressed 셋이 함께 간다. */
 .itin-day[aria-pressed="true"] {
-  border-color: var(--ink);
-  background: var(--ink);
+  background: var(--solid);
+  /* 노선색 막대와 朱 면 사이에 어두운 한 줄 — 색이 비슷해도 막대가 살아 있다 */
+  box-shadow: inset 0 2px 0 var(--solid-ink);
 }
 
-.itin-day[aria-pressed="true"] .itin-day__date {
-  color: var(--bg);
+.itin-day[aria-pressed="true"]:hover {
+  background: var(--solid);
 }
 
+.itin-day[aria-pressed="true"] .itin-day__date,
 .itin-day[aria-pressed="true"] .itin-day__label,
 .itin-day[aria-pressed="true"] .itin-day__range {
-  color: var(--bg);
-  opacity: .75;
+  color: var(--solid-ink);
 }
 
 /* "오늘 다닐 수 있는 시간" — **이 화면의 주인공**이다.
@@ -2947,15 +3082,17 @@ button.tl-title::after {
 .itin-window {
   display: grid;
   gap: var(--sp-2);
-  padding-bottom: var(--sp-3);
-  border-bottom: var(--rule) solid var(--line-strong);
+  padding: var(--sp-5);
+  border-left: 6px solid var(--area, var(--rail));
+  border-radius: var(--r-xs) var(--r-lg) var(--r-lg) var(--r-xs);
+  background: var(--surface);
 }
 
 .itin-window__range {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
   font-size: var(--fs-display);
-  font-weight: var(--fw-bold);
+  font-weight: var(--fw-black);
   letter-spacing: var(--ls-num);
   line-height: var(--lh-num);
   color: var(--ink);
@@ -2985,8 +3122,10 @@ button.tl-title::after {
 .itin-geo {
   display: grid;
   gap: var(--sp-2);
-  padding-left: var(--sp-3);
-  border-left: var(--rule) solid var(--line-strong);
+  padding: var(--sp-4);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  background: var(--surface-2);
 }
 
 .itin-geo__label {
@@ -2998,8 +3137,8 @@ button.tl-title::after {
 .itin-geo__eta {
   font-variant-numeric: tabular-nums;
   font-size: var(--fs-2xl);
-  font-weight: var(--fw-bold);
-  letter-spacing: -.025em;
+  font-weight: var(--fw-black);
+  letter-spacing: var(--ls-num);
   line-height: var(--lh-num);
   color: var(--ink);
 }
@@ -3019,15 +3158,19 @@ button.tl-title::after {
 /* 스톱 상세 시트 안의 한 줄짜리 표기 */
 .itin-geo__inline {
   padding-left: var(--sp-3);
-  border-left: var(--rule) solid var(--line-strong);
+  border-left: 4px solid var(--accent);
   font-size: var(--fs-sm);
   color: var(--muted);
 }
 
-/* 타임라인 — 실제 스톱 스타일은 components.css의 .tl-* */
+/* 타임라인 — 하루가 통째로 **하나의 면** 위에 얹힌다.
+   그 위를 노선색 레일이 처음부터 끝까지 관통하는 것이 이 화면의 그림이다.
+   (실제 스톱 스타일은 components.css의 .tl-*) */
 .itin-timeline {
   min-width: 0;
-  border-top: var(--rule) solid var(--line-strong);
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--r-lg);
+  background: var(--surface);
 }
 
 /* 스톱 상세 + 대안 3개 시트 (골격은 .sheet) */
@@ -3037,7 +3180,7 @@ button.tl-title::after {
 
 .itin-alts {
   display: grid;
-  gap: 0;
+  gap: var(--sp-2);
 }
 
 /* ============================================================== 탐색 탭 */
@@ -3054,7 +3197,7 @@ button.tl-title::after {
   top: 52px;
   z-index: 10;
   background: var(--bg);
-  padding: var(--sp-2) 0;
+  padding: var(--sp-3) 0;
 }
 
 /* 필터 영역 (audience 3버튼, sub 종류, 가격).
@@ -3071,25 +3214,27 @@ button.tl-title::after {
   padding-top: var(--sp-4);
   font-variant-numeric: tabular-nums;
   font-size: var(--fs-xs);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--faint);
 }
 
-/* 결과 리스트 = 표. 행 사이에 여백을 두지 않는다 — 괘선이 나눈다 (.card--place) */
+/* 목록은 **블록의 세로 더미**다. 예전에는 gap 0에 괘선으로만 나눴다 —
+   스크롤하면 어디서 한 곳이 끝나고 다음이 시작하는지 눈이 못 잡았다. */
 .exp-list {
   display: grid;
-  gap: 0;
+  gap: var(--sp-2);
   min-width: 0;
-  border-top: var(--rule) solid var(--line-strong);
 }
 
 /* 쇼핑 "뭘 살지" 목록 */
 .exp-buylist {
   display: grid;
   gap: 0;
-  padding-top: var(--sp-2);
+  padding: var(--sp-2) var(--sp-5);
+  border-radius: var(--r-lg);
+  background: var(--surface);
 }
 
 .exp-buy {
@@ -3103,7 +3248,7 @@ button.tl-title::after {
 
 .exp-buy__item {
   font-size: var(--fs-sm);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   color: var(--ink);
 }
 
@@ -3187,6 +3332,9 @@ button.tl-title::after {
 .map-layer--tiles {
   overflow: hidden;
   pointer-events: none;
+  /* 배경 지도를 한 단 죽여 그 위의 동선·마커를 화면에서 제일 진하게 만든다.
+     filter를 못 읽는 브라우저는 원색 타일 그대로 — 정보는 하나도 잃지 않는다. */
+  filter: var(--map-tile-tone);
 }
 
 /* 위치·크기는 계산 값이라 인라인 style로 온다 (§3 예외). 여기서는 형태만 정한다. */
@@ -3256,7 +3404,7 @@ button.tl-title::after {
   fill: var(--ink);
   font-family: var(--font-sans);
   font-size: 10px;
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   letter-spacing: var(--ls-caps);
   pointer-events: none;
 }
@@ -3350,7 +3498,7 @@ button.tl-title::after {
 
 /* 범위 밖 표시 — 방향 삼각형 한 개뿐이라 안쪽 그림표지가 없다 */
 .map-me--off .map-pin__label {
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
 }
 
 /* 위치 오차 범위. 점선이라 "정확한 점이 아니다"가 형태로 읽힌다 */
@@ -3489,27 +3637,31 @@ button.tl-title::after {
 /* ⚠ 고른 칩은 잉크 면이다. 그림표지도 --ink 로 그려지므로 그대로 두면 **잉크 위에 잉크**가
    되어 무엇을 골랐는지 그림이 사라진다. 고른 칩 안에서는 종이색으로 뒤집는다.
    (글자는 이미 .chip[aria-pressed] 규칙이 뒤집고 있다 — 그림도 같이 따라가야 한다.) */
+/* 켜진 칩은 **朱 면**이라, 그 위의 캐릭터는 그 면의 글자색(--solid-ink)으로 그린다.
+   예전에는 눌린 칩이 잉크 면이어서 --bg 로 그렸다 — 면이 바뀌면 여기도 같이 바뀌어야
+   캐릭터가 배경에 묻히지 않는다. */
 .chip[aria-pressed="true"] .map-actor__halo {
-  fill: var(--ink);
-  stroke: var(--bg);
+  fill: var(--solid);
+  fill-opacity: 1;
+  stroke: var(--solid-ink);
   stroke-opacity: .5;
 }
 
 .chip[aria-pressed="true"] .map-actor__head {
-  fill: var(--bg);
+  fill: var(--solid-ink);
 }
 
 .chip[aria-pressed="true"] .map-actor__limb {
-  stroke: var(--bg);
+  stroke: var(--solid-ink);
 }
 
 .chip[aria-pressed="true"] .map-actor__gear {
-  fill: var(--bg);
-  stroke: var(--ink);
+  fill: var(--solid-ink);
+  stroke: var(--solid);
 }
 
 .chip[aria-pressed="true"] .map-actor__strap {
-  stroke: var(--bg);
+  stroke: var(--solid-ink);
 }
 
 /* 캐릭터는 지도 위에서 클릭을 가로채지 않는다 — 아래의 마커를 누를 수 있어야 한다.
@@ -3580,10 +3732,19 @@ button.tl-title::after {
   gap: var(--sp-3);
 }
 
-/* 예산 집계 (엔화 + 원화 환산) */
+/* 예산 집계 (엔화 + 원화 환산) — 하나의 블록. 행은 그 안에서 괘선이 나눈다 */
 .trip-budget {
   display: grid;
   gap: 0;
+  padding: var(--sp-2) var(--sp-4) var(--sp-4);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+}
+
+/* 접혀 있는 일자별 표 — display:grid 가 hidden 을 이겨서 **빈 블록**이 남아 있었다.
+   면이 없던 시절에는 안 보였을 뿐 늘 거기 있었다. */
+.trip-budget[hidden] {
+  display: none;
 }
 
 .trip-budget__row {
@@ -3599,8 +3760,8 @@ button.tl-title::after {
 
 .trip-budget__row .num {
   font-variant-numeric: tabular-nums;
-  font-size: var(--fs-md);
-  font-weight: var(--fw-semibold);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
   color: var(--ink);
 }
 
@@ -3612,21 +3773,28 @@ button.tl-title::after {
   padding-top: var(--sp-4);
   border-top: var(--rule) solid var(--line-strong);
   font-size: var(--fs-xs);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--faint);
 }
 
+/* **내 여행 탭의 주인공 숫자.** 화면에서 --fs-display 를 쓰는 자리는 여기 하나다
+   (일정 탭은 그날의 시각 구간). 라벨 11px 과의 낙차가 이 화면의 조형이다. */
 .trip-budget__total .num {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
-  font-size: var(--fs-3xl);
-  font-weight: var(--fw-bold);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-black);
   letter-spacing: var(--ls-num);
   line-height: var(--lh-num);
   text-transform: none;
   color: var(--ink);
+}
+
+/* 넓어지면 한 단 키운다 — "24,600엔 (약 231,000원)"은 두 줄로 접히면 안 되는 문자열이다 */
+@media (min-width: 480px) {
+  .trip-budget__total .num { font-size: var(--fs-3xl); }
 }
 
 /* 합계 옆 "입장료 + 밥값" — 무엇을 센 금액인지는 지우지 않는다 */
@@ -3697,7 +3865,7 @@ button.tl-title::after {
 
 .hs-result__name {
   font-size: var(--fs-md);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   color: var(--ink);
 }
 
@@ -3728,7 +3896,7 @@ button.tl-title::after {
   background: var(--surface-2);
   border-bottom: var(--hair) solid var(--line);
   font-size: var(--fs-2xs);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--muted);
@@ -3781,7 +3949,7 @@ button.tl-title::after {
     padding: 0 var(--sp-2);
     border-radius: var(--r-sm);
     font-size: var(--fs-md);
-    font-weight: var(--fw-semibold);
+    font-weight: var(--fw-bold);
   }
 
   .shell-tab__mark {
@@ -8344,10 +8512,13 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
 
   /**
    * 덜 채운 시각 칸에 붙이는 한 문장 (BUG-028).
-   * **무엇이 왜 막혔는지**를 말한다 — "골라 주세요"는 사실이 아니다(사용자는 이미 넣었다).
+   *
+   * **화면에서 눈으로 찾을 수 있는 것**을 가리킨다 — 비어 있는 칸은 `--`로 그려진다.
+   * 이 칸이 세 조각이라는 걸 모르면 `오후 --:--`도 "채워진 것"처럼 보이기 때문에,
+   * "덜 찼다"만 말하면 사용자는 무엇을 더 해야 할지 알 수 없다.
+   * 브라우저가 왜 그러는지는 사용자가 알 필요 없다 — 그건 BUGLOG에 적는다.
    */
-  const PARTIAL_TIME_MSG = '시각이 덜 채워졌습니다 — 오전/오후 · 시 · 분 칸을 모두 채워 주세요. ' +
-    '한 칸이라도 비어 있으면 숫자가 보여도 브라우저가 이 칸을 빈 값으로 넘깁니다.';
+  const PARTIAL_TIME_MSG = '`--`로 남은 칸이 있습니다 — 오전/오후 · 시 · 분을 모두 채워 주세요.';
 
   /** 오류 문구에서 어느 칸을 말하는지 (화면 라벨과 같은 말을 쓴다) */
   const TIME_FIELD_KO = {
@@ -8426,6 +8597,12 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
       /**
        * 그 칸이 **넣다 만 상태**인가 (BUG-028). times[key]가 ''인 이유가
        * "아직 안 했다"인지 "칸이 남았다"인지를 여기서만 구별한다.
+       *
+       * ⚠ 이것은 **깃발이 아니라 스냅샷**이다. 쓰는 곳은 화면을 읽는 두 함수뿐이고
+       *   (`syncTimeError`·`syncTimesFromDom`), 둘 다 쓰기 직전에 DOM을 본다.
+       *   여기에 직접 true를 적어 두는 코드를 추가하지 말 것 — 껐어야 할 자리를
+       *   하나만 빠뜨려도 "다 채웠는데 덜 찼다"가 된다 (BUG-028 1차 수정의 실패 원인).
+       *   `validateStep`이 공개 API라 draft만 보기 때문에 이 칸이 필요하다.
        */
       timesPartial: { arrival: false, departure: false, flight: false, leave: false },
       arrival: { airportId: null, datetime: '' },
@@ -8710,11 +8887,28 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
   }
 
   /**
+   * 이 칸이 **지금** 덜 채워져 있는가 — 그때그때 화면을 읽는다.
+   *
+   * ⚠ 이 사실을 깃발로 들고 다니지 않는 것이 핵심이다 (BUG-028 2차).
+   *   1차 수정은 `timesPartial`을 이벤트가 올 때마다 켜고 껐는데, **켜 준 이벤트는 오고
+   *   꺼 줄 이벤트는 안 오는** 경로가 하나라도 있으면 깃발이 참인 채로 굳어
+   *   "다 채웠는데 덜 찼다고 한다"가 된다. 캐시가 없으면 그 고장이 존재할 수 없다.
+   *   화면에 없는 칸은 null이므로 false다 — 사라진 칸이 계속 항의하지 않는다.
+   *
+   * @param {string} key
+   * @returns {boolean}
+   */
+  function isPartialNow(key) {
+    return isPartialTime(timeInputOf(key));
+  }
+
+  /**
    * 화면의 시각 칸을 **다시 읽어** 상태에 반영한다.
    *
    * 이벤트가 온다는 보장이 없어서다 — `type="time"`은 칸이 덜 찼으면 input·change를
    * 아예 쏘지 않고(BUG-028), 뒤로 가기 복원·자동 채움은 값을 넣으면서도 이벤트를
    * 쏘지 않는다. **"다음"을 누르는 순간의 화면**이 사실이므로 그때 다시 읽는다.
+   * `validateStep`은 공개 API라 draft만 보므로, 검증 **직전에** 여기서 스냅샷을 맞춰 준다.
    *
    * ⚠ `leave` 칸의 **값은** 읽지 않는다. 그 칸은 역산 제안값을 보여 주고 있을 수 있고,
    *   제안값을 확정 입력으로 삼으면 engine 경고가 꺼진다 (BUG-018). 덜 찬 상태만 기록한다.
@@ -8722,10 +8916,10 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
    */
   function syncTimesFromDom() {
     for (const key in draft.times) {
+      const partial = isPartialNow(key);
+      draft.timesPartial[key] = partial;
       const input = timeInputOf(key);
-      if (!input) continue;
-      draft.timesPartial[key] = isPartialTime(input);
-      if (key !== 'leave' && !draft.timesPartial[key]) draft.times[key] = input.value || '';
+      if (input && key !== 'leave' && !partial) draft.times[key] = input.value || '';
     }
   }
 
@@ -9056,8 +9250,6 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
     input.id = id;
     input.type = 'time';
     input.value = draft.times[key] || '';
-    // 칸을 새로 그렸으면 화면은 draft 그대로다 — 덜 찬 상태는 여기서 초기화된다 (BUG-028).
-    draft.timesPartial[key] = false;
     input.setAttribute('data-field', 'time-' + key);
     input.setAttribute('inputmode', 'numeric');
     input.setAttribute('autocomplete', 'off');
@@ -9088,7 +9280,9 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
 
     const raw = draft.times[key];
     // 덜 채운 칸이 먼저다 — 화면에 숫자가 보이는데 "형식이 틀렸다"고 하면 더 헷갈린다.
-    const partial = draft.timesPartial[key];
+    // **깃발이 아니라 지금 화면을 읽는다** — 그래야 굳은 깃발이라는 고장 자체가 없다.
+    const partial = isPartialNow(key);
+    draft.timesPartial[key] = partial;   // validateStep이 볼 스냅샷도 여기서 같이 맞춘다
     const bad = partial || (!!raw && !isTime(raw));
     wrap.className = bad ? 'field is-invalid' : 'field';
     if (!input) return;
@@ -9919,14 +10113,17 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
   }
 
   /** 미리보기에 아직 필요한 입력 하나를 짚어 준다. */
+  /**
+   * 미리보기에 아직 필요한 입력 하나를 짚어 준다.
+   *
+   * ⚠ **덜 채운 칸은 여기서 말하지 않는다** (BUG-028 2차). 그 사실은 이미 그 칸 옆에
+   *   붙어 있고, 여기까지 옮겨 적으면 같은 문장이 화면에 세 번 나온다 — 한 가지 문제를
+   *   세 번 말하면 사용자는 세 가지 문제가 있는 줄 안다. **한 사실은 한 자리에서만** 말한다.
+   */
   function missingLabel() {
     const tail = '을 고르면 날짜별로 다닐 수 있는 시간이 나옵니다.';
     if (!draft.arrival.airportId) return '도착하는 공항' + tail;
     if (!draft.range.start || !draft.range.end) return '달력에서 도착하는 날과 떠나는 날' + tail;
-    // 덜 채운 칸을 "아직 안 고른 것"이라고 부르지 않는다 (BUG-028).
-    for (const k in draft.timesPartial) {
-      if (draft.timesPartial[k]) return TIME_FIELD_KO[k] + ': ' + PARTIAL_TIME_MSG;
-    }
     if (!draft.times.arrival) return '도착 시각' + tail;
     return '숙소를 떠나는 시각(또는 비행기 출발 시각)' + tail;
   }
@@ -10128,9 +10325,10 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
 
     // 덜 채운 칸이 가장 먼저다 (BUG-028). 화면에는 숫자가 보이는데 값은 ''이므로,
     // 이걸 먼저 짚지 않으면 아래에서 "골라 주세요"라고 **사실이 아닌** 안내가 나간다.
+    // 여기서는 **어느 칸인지만 짧게** 가리킨다 — 무엇이 비었는지는 그 칸 옆에 이미 적혀 있다.
     const keys = ['arrival'].concat(dep.mode === 'flight' ? ['flight', 'leave'] : ['departure']);
     for (const k of keys) {
-      if (partial[k]) return fail(TIME_FIELD_KO[k] + ': ' + PARTIAL_TIME_MSG);
+      if (partial[k]) return fail(TIME_FIELD_KO[k] + '을 마저 채워 주세요.');
     }
 
     // 형식이 깨진 값은 "안 넣은 값"과 다르다. 먼저 짚어 줘야 "골라 주세요"라는
@@ -10508,9 +10706,8 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
     if (name.indexOf('time-') === 0) {
       const key = name.slice('time-'.length);
       draft.times[key] = value;
-      // input·change가 왔다는 것은 값이 완성됐다는 뜻이다 (BUG-028).
-      draft.timesPartial[key] = false;
-      // 형식이 깨졌으면 **입력 즉시** 그 칸 옆에서 말한다 (다음을 누를 때까지 기다리지 않는다).
+      // 형식이 깨졌거나 덜 찼으면 **입력 즉시** 그 칸 옆에서 말한다 (다음을 누를 때까지
+      // 기다리지 않는다). 덜 찬 상태는 syncTimeError가 화면에서 직접 읽는다 (BUG-028).
       syncTimeError(key);
       // 입력칸 자체는 건드리지 않는다 — 값을 다시 써 넣으면 커서가 튄다 (BUG-008 계열).
       if (key === 'leave') {
@@ -10562,11 +10759,10 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
     const key = name.slice('time-'.length);
     if (!(key in draft.timesPartial)) return;
 
-    const partial = isPartialTime(target);
-    if (partial === draft.timesPartial[key]) return;
-    draft.timesPartial[key] = partial;
-    syncTimeError(key);
-    // 덜 찬 칸이 생겼으면 스텝 오류로 걸어 둔 안내는 낡았다 — 그 칸 옆 문장이 대신 말한다.
+    const before = draft.timesPartial[key];
+    syncTimeError(key);                       // 화면을 다시 읽고 그 칸 옆 문장을 맞춘다
+    if (draft.timesPartial[key] === before) return;
+    // 상태가 바뀌었으면 아래에 걸어 둔 스텝 안내는 낡았다 — 그 칸 옆 문장이 대신 말한다.
     clearError();
   }
 
@@ -11893,6 +12089,7 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
     els = {
       globalNotes: rootEl.querySelector('[data-slot="global-notes"]'),
       daynav: rootEl.querySelector('.itin-daynav'),
+      window: rootEl.querySelector('.itin-window'),
       range: rootEl.querySelector('.itin-window__range'),
       meta: rootEl.querySelector('.itin-window__meta'),
       meter: rootEl.querySelector('.meter'),
@@ -12066,6 +12263,7 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
       const d = list[i];
       const range = ctx.format.time(d.start) + '–' + ctx.format.time(d.end);
       out += '<button type="button" class="itin-day" data-action="select-day" data-day="' + i + '"'
+        + ' data-area="' + esc(dayArea(d)) + '"'
         + ' aria-pressed="' + (i === selected ? 'true' : 'false') + '">'
         + '<span class="itin-day__label">DAY ' + (i + 1) + '</span>'
         + '<span class="itin-day__date">' + esc(ctx.format.dateLabel(d.date)) + '</span>'
@@ -12073,6 +12271,19 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
         + '</button>';
     }
     return out;
+  }
+
+  /**
+   * 그날의 대표 권역 id. **표시 전용이다** — 계산도 판단도 하지 않고,
+   * engine이 이미 정해 준 `day.areas`의 첫 값을 그대로 쓴다 (ARCHITECTURE §1).
+   * 날짜 칩 위 막대와 일자 헤더 좌측 막대가 이 값으로 노선색을 받는다.
+   * 없으면 빈 문자열이고, 그때 CSS는 var(--area, var(--rail))의 폴백으로 떨어진다.
+   * @param {Object} day plan.days[i]
+   * @returns {string}
+   */
+  function dayArea(day) {
+    const ids = (day && Array.isArray(day.areas)) ? day.areas : [];
+    return ids.length ? String(ids[0]) : '';
   }
 
   /** 날짜 전환은 aria-pressed만 바꾼다 (선택 상태의 정본은 속성이다 — UI_CONTRACT §1). */
@@ -12090,6 +12301,8 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
     let cost = 0;
     for (let i = 0; i < stops.length; i++) cost += estimateCost(stops[i].place);
 
+    // 일자 헤더의 좌측 막대도 그날의 노선색을 받는다 (날짜 칩·타임라인 레일과 한 색말)
+    if (els.window) els.window.setAttribute('data-area', dayArea(day));
     els.range.textContent = ctx.format.time(day.start) + '–' + ctx.format.time(day.end);
     els.meta.innerHTML = ''
       + '<span>갈 곳 <span class="num">' + esc(String(stops.length)) + '곳</span></span>'
