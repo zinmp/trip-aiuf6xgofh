@@ -66,7 +66,7 @@
   --surface:     #FBFCFE;  /* 한 단 들린 면 (시트 · 달력 · 자동완성) */
   --surface-2:   #E1E7EE;  /* 한 단 낮은 면 (세그먼트 홈, 배지) */
   --surface-3:   #D2DAE3;  /* 눌림 · 선택 상태 */
-  --line:        #CBD5DF;  /* 머리카락 괘선 — 행과 행 사이 */
+  --line:        #B6C4D3;  /* 머리카락 괘선 — 행과 행 사이 (바탕 대비 1.56:1) */
   --line-strong: #78889A;  /* 굵은 칸선 · 열 구분선 (바탕 대비 3.2:1) */
   --clear:       rgba(0,0,0,0);  /* 투명. 레이아웃 유지용 빈 테두리에 쓴다 */
 
@@ -77,11 +77,21 @@
 
   /* 브랜드 액센트 — 단 하나. 그리고 **조작에만** 쓴다 */
   --accent:        #0B6480;  /* 행선 표시기의 신호색 */
-  --accent-strong: #084F66;  /* hover · 눌림 */
-  --accent-ink:    #FFFFFF;  /* 액센트 면 위의 글자 (6.7:1) */
   --accent-weak:   #DCE9EE;  /* 액센트 톤 배경 (단색 폴백용) */
   --accent-line:   #4E93AD;  /* 액센트 톤 테두리 (바탕 대비 3.0:1) */
   --focus:         #0B6480;  /* 포커스 링 (바탕 대비 5.9:1) */
+
+  /* 확정된 면 — 주 버튼 · 고른 항목 · 눌린 세그먼트.
+     **액센트로 칠하지 않는다.** 밝은 하늘색 버튼 하나가 화면에서 제일 시끄러운
+     물건이 되던 것을 여기서 끊었다. 존재감은 채도가 아니라 **명도차**로 만든다 —
+     라이트에서는 어두운 잉크 면, 다크에서는 밝은 잉크 면. 색이 아니라 무게로 선다. */
+  --solid:     #16222D;  /* 바탕 대비 14.2:1 */
+  --solid-ink: #F3F7FA;  /* 그 면 위의 글자 (15.0:1) */
+
+  /* 고른 구간의 띠 — 달력의 여행 기간, 고른 목록 행.
+     칸마다 다른 채움을 주지 않는다. 띠는 **하나의 색으로 이어지고** 양 끝만
+     잉크 괘선으로 끊는다. 이 위에 얹는 글자는 항상 --ink 다. */
+  --sel-band:  #ADC5DA;  /* 잉크 대비 10.1:1 · 바탕 대비 1.6:1 */
 
   /* 기능색 — 상태. 면이 아니라 괘선과 글자색으로 말한다 (weak는 작은 배지 안에서만) */
   --ok:          #256B47;
@@ -183,11 +193,16 @@
 
     /* 브랜드 액센트 — 라이트의 반전이 아니다. 빛나지 않도록 채도를 낮춘 강철빛이다 */
     --accent:        #6FB6D4;
-    --accent-strong: #93CDE5;
-    --accent-ink:    #08161D;
     --accent-weak:   #16303C;
     --accent-line:   #457C95;
     --focus:         #8FCAE2;
+
+    /* 확정된 면 — 다크에서는 **밝은 잉크 면**이다. 형광 시안 버튼의 자리를 이것이 대신한다 */
+    --solid:     #BFCEDB;  /* 바탕 대비 10.7:1 */
+    --solid-ink: #101922;  /* 그 면 위의 글자 (11.0:1) */
+
+    /* 고른 구간의 띠 */
+    --sel-band:  #3A4D62;  /* 잉크 대비 7.2:1 · 바탕 대비 2.0:1 */
 
     /* 기능색 — 상태 */
     --ok:          #63BE8E;
@@ -277,7 +292,7 @@
   --surface:     #FBFCFE;
   --surface-2:   #E1E7EE;
   --surface-3:   #D2DAE3;
-  --line:        #CBD5DF;
+  --line:        #B6C4D3;  /* 머리카락 괘선 — 행과 행 사이 (바탕 대비 1.56:1) */
   --line-strong: #78889A;
   --clear:       rgba(0,0,0,0);
 
@@ -288,11 +303,16 @@
 
   /* 브랜드 액센트 — 단 하나. 그리고 조작에만 쓴다 */
   --accent:        #0B6480;
-  --accent-strong: #084F66;
-  --accent-ink:    #FFFFFF;
   --accent-weak:   #DCE9EE;
   --accent-line:   #4E93AD;
   --focus:         #0B6480;
+
+  /* 확정된 면 — 라이트에서는 어두운 잉크 면 */
+  --solid:     #16222D;  /* 바탕 대비 14.2:1 */
+  --solid-ink: #F3F7FA;  /* 그 면 위의 글자 (15.0:1) */
+
+  /* 고른 구간의 띠 */
+  --sel-band:  #ADC5DA;  /* 잉크 대비 10.1:1 · 바탕 대비 1.6:1 */
 
   /* 기능색 — 상태 */
   --ok:          #256B47;
@@ -392,11 +412,16 @@
 
   /* 브랜드 액센트 — 빛나지 않도록 채도를 낮춘 강철빛 */
   --accent:        #6FB6D4;
-  --accent-strong: #93CDE5;
-  --accent-ink:    #08161D;
   --accent-weak:   #16303C;
   --accent-line:   #457C95;
   --focus:         #8FCAE2;
+
+  /* 확정된 면 — 다크에서는 밝은 잉크 면 */
+  --solid:     #BFCEDB;  /* 바탕 대비 10.7:1 */
+  --solid-ink: #101922;  /* 그 면 위의 글자 (11.0:1) */
+
+  /* 고른 구간의 띠 */
+  --sel-band:  #3A4D62;  /* 잉크 대비 7.2:1 · 바탕 대비 2.0:1 */
 
   /* 기능색 — 상태 */
   --ok:          #63BE8E;
@@ -860,8 +885,14 @@ textarea {
  *   목록 카드·필터 칩·배지는 지역 **이름**으로 말한다 — 17색이 목록을 물들이면
  *   그건 노선도가 아니라 색표다.
  *
- * ⚠ BUG-004: color-mix() 등 신규 CSS 함수를 쓸 때는 바로 앞줄에 단색 폴백을
- *   먼저 선언한다. 미지원 브라우저에서 선언이 통째로 무효화된다.
+ * ⚠ BUG-004 후속: **color-mix()를 쓰지 않는다.**
+ *   예전에는 `background: var(--x)` 한 줄을 앞에 두고 다음 줄에 color-mix를 쓰는
+ *   "단색 폴백" 방식을 썼다. 그런데 값에 var()가 섞이면 이 방식은 **작동하지 않는다** —
+ *   var()가 든 선언은 파싱 단계에서는 늘 유효해서 앞줄 폴백을 밀어내고, 계산 단계에서
+ *   color-mix를 못 읽으면 그때 속성이 통째로 unset(=투명)이 된다. 폴백은 이미 사라진 뒤다.
+ *   실제로 하단 고정 바·탭바가 미지원 브라우저에서 **투명**해져 본문이 비쳐 보였다.
+ *   지금은 어느 자리든 토큰 단색 하나만 쓴다. 미묘한 혼합색이 꼭 필요하면
+ *   tokens.css에 그 색을 4블록 전부 새 토큰으로 만들어 넣는다.
  * ==========================================================================*/
 
 /* =========================================== 0. 터치 타깃 (--tap 44px) ==
@@ -1019,20 +1050,22 @@ button.tl-title::after {
   background: var(--surface-3);
 }
 
-/* 주 액션 — 액센트 면. 화면당 하나다 */
+/* 주 액션 — **잉크 면이다. 액센트 면이 아니다.**
+   예전에는 --accent 를 크게 칠했다. 남색 바탕 위의 밝은 하늘색 판이 화면에서 제일
+   시끄러운 물건이 되어, 정작 주인공인 날짜·시각보다 버튼이 먼저 눈에 들어왔다.
+   지금은 고른 항목·눌린 세그먼트·지나온 역과 **같은 언어**를 쓴다 — 확정된 것은 잉크로
+   칠한다. 존재감은 채도가 아니라 명도차에서 온다. 화면당 하나다. */
 .btn--primary {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: var(--accent-ink);
+  border-color: var(--solid);
+  background: var(--solid);
+  color: var(--solid-ink);
 }
 
-.btn--primary:hover {
-  border-color: var(--accent-strong);
-  background: var(--accent-strong);
-}
-
+/* 잉크 면은 더 진해질 곳이 없다 — hover·active는 색이 아니라 **테두리**로 답한다 */
+.btn--primary:hover,
 .btn--primary:active {
-  background: var(--accent-strong);
+  border-color: var(--ink);
+  background: var(--solid);
 }
 
 /* 보조 액션 — 테두리만 */
@@ -1042,9 +1075,7 @@ button.tl-title::after {
 }
 
 .btn--ghost:hover {
-  /* BUG-004 폴백: color-mix 미지원 시 이 단색이 남는다 */
   background: var(--accent-weak);
-  background: color-mix(in srgb, var(--accent) 10%, var(--bg));
   border-color: var(--accent);
 }
 
@@ -1136,13 +1167,17 @@ button.tl-title::after {
   text-decoration: none;
 }
 
-/* 선택 상태 = **잉크 면**. aria-pressed="true"를 그대로 셀렉터로 쓴다(상태 이중관리 방지).
-   액센트로 칠하지 않는 이유: 액센트는 조작 신호라 화면 여기저기에서 켜지면 안 된다 */
+/* 선택 상태 = **고른 구간의 띠**. 달력의 여행 기간·고른 목록 행과 같은 언어다.
+   예전에는 칩 하나가 통째로 잉크 면이라, 칩 줄에서 그 하나만 등불처럼 떴다 —
+   다크에서는 특히 심했다(어두운 줄에 흰 알약 하나).
+   지금은 띠를 깔고 테두리를 잉크로 굵혀 고른 것을 알린다.
+   aria-pressed="true"를 그대로 셀렉터로 쓴다(상태 이중관리 방지).
+   색만으로 말하지 않는다 — 테두리 굵기와 글자 굵기가 함께 바뀐다. */
 .chip[aria-pressed="true"] {
   border-color: var(--ink);
-  background: var(--ink);
-  color: var(--bg);
-  font-weight: var(--fw-semibold);
+  background: var(--sel-band);
+  color: var(--ink);
+  font-weight: var(--fw-bold);
 }
 
 /* 권역 칩 — 예전에는 좌측 4px 노선색 레일을 달았다. **뺐다.**
@@ -1159,50 +1194,104 @@ button.tl-title::after {
   color: var(--faint);
 }
 
+/* 띠 위에서는 개수도 잉크로 적는다 — opacity로 흐리면 대비가 계산을 벗어난다 */
 .chip[aria-pressed="true"] .chip__count {
-  color: var(--bg);
-  opacity: .75;
+  color: var(--ink);
 }
 
 /* -------- 세그먼트 (3개 이하 배타 선택: 먹거리/쇼핑/관광) -------- */
 
+/* 알약 속에 든 알약이 아니다 — **괘선 위에 선 탭**이다.
+   예전에는 둥근 상자 안에 또 둥근 상자가 들어 있어서, 화면의 다른 상자들과 구별되지
+   않는 덩어리가 하나 더 늘어날 뿐이었다. 지금은 상자를 걷어내고 아래 괘선 하나를
+   깐 뒤, 고른 것만 그 괘선을 잉크로 굵게 덮는다.
+   상태는 색만으로 말하지 않는다 — 밑줄(형태) + 굵기 + aria-pressed 셋이 함께 간다. */
 .seg {
   display: flex;
-  padding: 3px;
-  border: var(--hair) solid var(--line);
-  border-radius: var(--r-sm);
-  background: var(--surface-2);
+  padding: 0;
+  border: 0;
+  border-bottom: var(--hair) solid var(--line);
+  border-radius: 0;
+  background: var(--clear);
 }
 
 .seg__btn {
   flex: 1 1 0;
   min-width: 0;
-  min-height: 36px;
+  min-height: var(--tap);
   padding: 0 var(--sp-2);
-  border-radius: var(--r-xs);
+  border-radius: 0;
+  /* 자기 밑줄을 그룹 괘선 위에 겹쳐 올린다 — 눌리면 그 자리만 잉크로 바뀐다 */
+  border-bottom: var(--rule) solid var(--clear);
+  margin-bottom: calc(var(--hair) * -1);
   background: var(--clear);
   color: var(--muted);
   font-size: var(--fs-sm);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-medium);
   text-align: center;
-  transition: background var(--dur-fast) var(--ease),
-              color var(--dur-fast) var(--ease);
+  transition: color var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease);
+}
+
+.seg__btn:hover {
+  color: var(--ink);
 }
 
 .seg__btn[aria-pressed="true"] {
-  background: var(--ink);
-  color: var(--bg);
+  border-bottom-color: var(--ink);
+  color: var(--ink);
+  font-weight: var(--fw-bold);
 }
 
 /* ============================================================== 3. 카드 */
 
-/* 상자는 최소한만 남겼다 — 테두리 한 겹, 그림자 없음, 모서리는 작게 */
+/* **상자가 아니다.** 사실을 줄맞춰 찍은 표다.
+   예전에는 테두리 한 겹 + 옅은 면이었다. 그 결과 입력칸도 상자, 달력도 상자, 요약도
+   상자라 화면이 똑같이 생긴 둥근 사각형의 더미가 됐다.
+   지금은 위에 굵은 칸선을 긋고 행마다 머리카락 괘선으로 나눈다 — 면도 모서리도 없다. */
 .card {
   display: block;
-  padding: var(--sp-4);
-  border: var(--hair) solid var(--line);
-  border-radius: var(--r-sm);
-  background: var(--surface);
+  padding: 0;
+  border: 0;
+  border-top: var(--rule) solid var(--line-strong);
+  border-radius: 0;
+  background: var(--clear);
+}
+
+/* 표의 한 행 — 왼쪽에 작은 라벨, 오른쪽에 값. 행과 행은 괘선으로 나뉜다 */
+.card > .stack {
+  gap: 0;
+}
+
+/* **열이 맞아야 표다.** flex 로 두면 라벨 길이만큼 값의 시작점이 제각각 밀려서
+   ("물어볼 것" / "만들어 드릴 것") 표가 아니라 그냥 문단 세 개로 보인다.
+   라벨 열의 폭을 고정해 값이 전부 같은 세로선에서 시작하게 한다. */
+.card > .stack > .row {
+  display: grid;
+  grid-template-columns: minmax(0, 92px) minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--sp-2) var(--sp-3);
+  padding: var(--sp-3) 0;
+  border-bottom: var(--hair) solid var(--line);
+}
+
+.card > .stack > .row > .label {
+  padding-top: 1px;
+}
+
+/* 값은 본문 잉크로. 위계는 색이 아니라 **크기와 결**이 만든다 */
+.card > .stack > .row > :not(.label) {
+  min-width: 0;
+  font-size: var(--fs-sm);
+  color: var(--ink);
+}
+
+/* 320px에서는 92px 라벨 열이 값을 너무 조인다 — 그때만 두 줄로 눕힌다 */
+@media (max-width: 359px) {
+  .card > .stack > .row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-1);
+  }
 }
 
 /* 탭 가능한 카드 (button/a 로 감싼 경우) */
@@ -1250,9 +1339,7 @@ button.tl-title::after {
 }
 
 .card--place:hover {
-  /* BUG-004 폴백: color-mix 미지원 시 이 단색이 남는다 */
   background: var(--surface-2);
-  background: color-mix(in srgb, var(--ink) 4%, var(--bg));
   border-color: var(--line);
 }
 
@@ -1628,9 +1715,7 @@ button.tl-title::after {
 }
 
 .tl-stop--tappable:hover {
-  /* BUG-004 폴백: color-mix 미지원 시 이 단색이 남는다 */
   background: var(--surface-2);
-  background: color-mix(in srgb, var(--ink) 4%, var(--bg));
 }
 
 .tl-stop.is-done .tl-title {
@@ -1753,20 +1838,23 @@ button.tl-title::after {
 
 /* ========================================================= 8. 검색 입력 */
 
+/* 검색칸도 상자가 아니다 — `.field__input`과 같은 언어의 **밑줄 한 줄**이다.
+   좌우 padding이 0이라 아이콘과 글자가 본문과 같은 세로선에서 시작한다. */
 .search {
   display: flex;
   align-items: center;
   gap: var(--sp-2);
-  /* 테두리 2px을 더해 준다 — 그러지 않으면 안쪽 입력칸이 42px이 되어 --tap에 2px 못 미친다 */
-  min-height: calc(var(--tap) + 2px);
-  padding: 0 var(--sp-3);
-  border: var(--hair) solid var(--line-strong);
-  border-radius: var(--r-sm);
-  background: var(--surface);
+  min-height: var(--tap);
+  padding: 0;
+  border: 0;
+  border-bottom: var(--rule) solid var(--line-strong);
+  border-radius: 0;
+  background: var(--clear);
+  transition: border-color var(--dur-fast) var(--ease);
 }
 
 .search:focus-within {
-  border-color: var(--accent);
+  border-bottom-color: var(--ink);
 }
 
 .search__icon {
@@ -1793,44 +1881,70 @@ button.tl-title::after {
 
 /* ============================================================== 9. 폼 */
 
+/* 한 벌의 구성이 뒤집혔다. 예전에는 **라벨(작은 회색) → 큰 상자 → 힌트(작은 회색)**가
+   화면 끝까지 같은 리듬으로 반복됐다 — 그게 "폼처럼 보인다"의 정체다.
+   지금은 라벨을 역명판처럼 작게 눕히고 **값을 크게 세운다.** 상자는 없다.
+   이 화면의 주인공은 칸이 아니라 그 안에 적힌 시각이다. */
 .field {
   display: grid;
   gap: var(--sp-2);
   min-width: 0;
 }
 
+/* 역명판 라벨 — 크기가 아니라 **결**로 본문과 갈린다 (.label 과 같은 언어) */
 .field__label {
-  font-size: var(--fs-sm);
+  margin-bottom: calc(var(--sp-1) * -1);
+  font-size: var(--fs-2xs);
   font-weight: var(--fw-semibold);
-  color: var(--ink);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--faint);
 }
 
+/* 입력은 상자가 아니라 **괘선 위에 적는 값**이다.
+   테두리 네 겹 · 옅은 면 · 둥근 모서리를 전부 걷어내고 밑줄 하나만 남겼다.
+   왼쪽 padding도 0이다 — 값이 본문·제목과 같은 세로선에서 시작해야 줄이 맞는다. */
 .field__input,
 .field__select {
   width: 100%;
   min-height: var(--tap);
-  padding: 0 var(--sp-3);
-  border: var(--hair) solid var(--line-strong);
-  border-radius: var(--r-sm);
-  background: var(--surface);
+  padding: 0;
+  border: 0;
+  border-bottom: var(--rule) solid var(--line-strong);
+  border-radius: 0;
+  background: var(--clear);
   color: var(--ink);
-  font-size: var(--fs-md);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-medium);
   font-variant-numeric: tabular-nums;
+  transition: border-color var(--dur-fast) var(--ease);
 }
 
+/* 화살표는 currentColor로 그린 삼각 두 개다 — 마크업도 이미지도 늘리지 않는다.
+   (tokens.css 머리말: currentColor는 색 리터럴 금지의 예외다) */
 .field__select {
   appearance: none;
   -webkit-appearance: none;
-  padding-right: var(--sp-6);
+  padding-right: var(--sp-5);
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 9px) calc(50% - 1px),
+    calc(100% - 4px) calc(50% - 1px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
 }
 
+/* 포커스는 밑줄이 잉크로 굵어져 답한다 (링은 base.css가 따로 그린다) */
 .field__input:focus,
 .field__select:focus {
-  border-color: var(--accent);
+  border-bottom-color: var(--ink);
 }
 
 .field__hint {
   font-size: var(--fs-xs);
+  line-height: var(--lh-base);
   color: var(--faint);
 }
 
@@ -1842,26 +1956,28 @@ button.tl-title::after {
 
 .field.is-invalid .field__input,
 .field.is-invalid .field__select {
-  border-color: var(--danger);
+  border-bottom-color: var(--danger);
 }
 
-/* 범위 슬라이더 (취향 비중) */
+/* 범위 슬라이더 (취향 비중) — 막대 셋이 나란히 서는 자리라 액센트로 칠하면
+   그 세 줄이 화면에서 제일 밝은 물건이 된다. 잉크로 칠한다. */
 .field__range {
   width: 100%;
-  min-height: 32px;
-  accent-color: var(--accent);
+  min-height: var(--tap);
+  accent-color: var(--ink);
 }
 
 /* -------- 달력 (날짜 범위 선택) --------
-   시각표의 운행 캘린더처럼 각지게. 고른 날은 액센트가 아니라 **잉크**로 칠하고
-   사이는 아주 옅게 깐다. 날짜 칸은 전부 44px(--tap) 이상이다. */
+   시각표의 운행 캘린더다. 상자에 담지 않는다 — 위에 굵은 칸선을 긋고 그 아래에 펼친다.
+   날짜 칸은 전부 44px(--tap) 이상이다. */
 .cal {
   display: grid;
   gap: var(--sp-3);
-  padding: var(--sp-3);
-  border: var(--hair) solid var(--line);
-  border-radius: var(--r-sm);
-  background: var(--surface);
+  padding: var(--sp-3) 0 0;
+  border: 0;
+  border-top: var(--rule) solid var(--line-strong);
+  border-radius: 0;
+  background: var(--clear);
   min-width: 0;
 }
 
@@ -1879,16 +1995,21 @@ button.tl-title::after {
   font-variant-numeric: tabular-nums;
 }
 
+/* 고른 날짜를 **말로도 적는다** — 띠가 안 보이는 사람에게도 범위가 전달되어야 한다
+   (role="status", 색만으로 정보를 전달하지 않는다) */
 .cal__hint {
-  font-size: var(--fs-xs);
+  font-size: var(--fs-sm);
   line-height: var(--lh-base);
-  color: var(--muted);
+  color: var(--ink);
 }
 
+/* 가로 간격이 0이어야 고른 구간이 **끊기지 않은 하나의 띠**로 읽힌다.
+   예전에는 칸마다 2px씩 벌어져 있어서, 띠가 아니라 각각 칠해진 조각 다섯 개로 보였다. */
 .cal__grid {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 2px;
+  column-gap: 0;
+  row-gap: 2px;
   min-width: 0;
 }
 
@@ -1911,11 +2032,12 @@ button.tl-title::after {
   justify-content: center;
   min-height: var(--tap);
   padding: 0;
-  border: var(--hair) solid var(--clear);
-  border-radius: var(--r-xs);
+  border: 0;
+  border-radius: 0;
   background: var(--clear);
   color: var(--ink);
-  font-size: var(--fs-sm);
+  /* 날짜는 이 화면의 주인공 중 하나다 — 44px 칸 안에서 13px는 너무 작았다 */
+  font-size: var(--fs-md);
   font-variant-numeric: tabular-nums;
   cursor: pointer;
 }
@@ -1925,22 +2047,45 @@ button.tl-title::after {
   cursor: default;
 }
 
-/* 오늘 — 면이 아니라 테두리로만 */
+/* 오늘 — 채움도 상자도 아니다. 숫자 밑에 그은 짧은 밑줄 하나다.
+   고른 구간과 **종류가 다른 표시**라서 겹쳐도 서로를 가리지 않는다.
+   (예전에는 오늘만 테두리 상자라, 채움 두 종류와 섞여 네 가지 스타일이 됐다.) */
 .cal__day[aria-current="date"] {
-  border-color: var(--line-strong);
+  text-decoration: underline;
+  text-decoration-thickness: var(--rule);
+  text-underline-offset: 4px;
 }
 
-/* 시작일과 종료일 사이 */
-.cal__day.is-in {
-  background: var(--surface-3);
-}
-
-/* 시작일 · 종료일 (선택 상태의 정본은 aria-pressed다) */
+/* 고른 구간 = **하나의 띠**. 도착일 · 사이 · 출발일이 전부 같은 색으로 이어진다.
+   예전에는 끝은 밝은 채움, 사이는 어두운 채움, 오늘은 테두리로 네 가지가 섞여
+   무엇이 고른 것인지 읽히지 않았다. 채움은 이제 한 종류뿐이다. */
+.cal__day.is-in,
 .cal__day[aria-pressed="true"] {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--bg);
+  background: var(--sel-band);
+  color: var(--ink);
+}
+
+/* 띠의 양 끝 — 도착한 날과 떠나는 날.
+   **색을 바꾸지 않고** 잉크 괘선과 굵기로 끊는다 (색만으로 정보를 전달하지 않는다).
+   상태의 정본은 aria-pressed 이고, 달력 위 안내문이 날짜를 말로도 적는다. */
+.cal__day[aria-pressed="true"] {
   font-weight: var(--fw-bold);
+  box-shadow: inset var(--rule) 0 0 var(--ink),
+              inset calc(var(--rule) * -1) 0 0 var(--ink);
+}
+
+/* :has()가 되는 곳에서는 띠 **안쪽**을 향한 괘선을 지워 바깥쪽 끝만 남긴다.
+   안 되는 브라우저는 위 규칙대로 양쪽에 괘선이 남는다 — 띠는 그대로 이어진다. */
+@supports selector(:has(*)) {
+  .cal__day[aria-pressed="true"]:has(+ .cal__day.is-in),
+  .cal__day[aria-pressed="true"]:has(+ .cal__day[aria-pressed="true"]) {
+    box-shadow: inset var(--rule) 0 0 var(--ink);
+  }
+
+  .cal__day.is-in + .cal__day[aria-pressed="true"],
+  .cal__day[aria-pressed="true"] + .cal__day[aria-pressed="true"] {
+    box-shadow: inset calc(var(--rule) * -1) 0 0 var(--ink);
+  }
 }
 
 /* -------- 시각 입력 --------
@@ -1948,10 +2093,13 @@ button.tl-title::after {
    옮겨 적는 값이라, 눌러서 맞추다 잘못 멈추면 그대로 틀린 값이 굳는다.
    지금은 `.field > input[type="time"]` 한 칸뿐이라 전용 클래스가 필요 없다 —
    숫자만 크게 키워 옮겨 적은 값을 눈으로 확인하기 쉽게 한다. */
+   이 화면의 주인공은 "언제 도착해서 언제 떠나는가"다. 그러니 시각이 화면에서 제일 큰
+   글자여야 한다 — 라벨은 역명판처럼 작게 눕고, 값만 크게 선다. */
 .field__input[type="time"] {
-  font-size: var(--fs-xl);
+  font-size: var(--fs-2xl);
   font-weight: var(--fw-bold);
-  letter-spacing: -.02em;
+  letter-spacing: var(--ls-num);
+  line-height: var(--lh-num);
 }
 
 /* ==================================================== 10. 출처 · 고지 */
@@ -2344,9 +2492,7 @@ button.tl-title::after {
   gap: var(--sp-3);
   min-height: 52px;
   padding: var(--sp-2) var(--sp-4);
-  /* BUG-004 폴백: 아래 color-mix/backdrop-filter가 무효화돼도 이 단색이 남는다 */
   background: var(--bg);
-  background: color-mix(in srgb, var(--bg) 86%, var(--surface));
   border-bottom: var(--hair) solid var(--line);
   -webkit-backdrop-filter: saturate(180%) blur(12px);
   backdrop-filter: saturate(180%) blur(12px);
@@ -2423,7 +2569,6 @@ button.tl-title::after {
 }
 
 /* 하단 탭바 (일정 · 탐색 · 지도 · 내 여행) */
-/* ⚠ BUG-004: 반투명 배경에는 단색 폴백을 먼저 선언한다 */
 .shell-tabbar {
   position: fixed;
   left: 0;
@@ -2434,7 +2579,6 @@ button.tl-title::after {
   height: calc(var(--nav-h) + var(--safe-b));
   padding-bottom: var(--safe-b);
   background: var(--bg);
-  background: color-mix(in srgb, var(--bg) 88%, var(--surface));
   border-top: var(--hair) solid var(--line-strong);
   -webkit-backdrop-filter: saturate(180%) blur(12px);
   backdrop-filter: saturate(180%) blur(12px);
@@ -2565,6 +2709,15 @@ button.tl-title::after {
   background: var(--line-strong);
 }
 
+/* 스텝을 넘길 때 이 상자로 포커스를 옮긴다 — 스크린리더가 새 질문을 읽게 하려는 것이다.
+   그런데 tabindex="-1" 이라 키보드로는 닿을 수 없는 상자인데도 브라우저가 포커스 링을
+   그려서, **모든 스텝 상단에 밝은 하늘색 가로줄**이 한 줄 그어져 있었다.
+   프로그램이 옮긴 포커스라 링은 지운다 — 키보드로 닿는 컨트롤의 링은 그대로다. */
+.ob-body:focus,
+.ob-body:focus-visible {
+  outline: none;
+}
+
 /* 스텝 본문 */
 .ob-body {
   flex: 1 1 auto;
@@ -2594,33 +2747,42 @@ button.tl-title::after {
   color: var(--muted);
 }
 
-/* 국가/도시 선택 카드 그리드 */
+/* 고르는 목록 — **균일한 카드 격자가 아니라 표의 행이다.**
+   예전에는 140px짜리 둥근 상자가 격자로 깔렸다. 어떤 화면이든 같은 크기의 사각형이
+   같은 간격으로 반복돼서, 내용이 달라도 화면이 늘 똑같아 보였다.
+   지금은 상자를 걷고 괘선으로만 나눈다 — 행의 높이는 내용이 정한다. */
 .ob-choices {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--sp-2);
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  border-top: var(--hair) solid var(--line);
 }
 
 .ob-choice {
   display: grid;
   gap: 2px;
-  align-content: start;
-  padding: var(--sp-3) var(--sp-4);
-  border: var(--hair) solid var(--line);
-  border-radius: var(--r-sm);
-  background: var(--surface);
+  align-content: center;
+  min-height: var(--tap);
+  padding: var(--sp-3);
+  border: 0;
+  border-bottom: var(--hair) solid var(--line);
+  border-radius: 0;
+  background: var(--clear);
   text-align: left;
   min-width: 0;
+  transition: background var(--dur-fast) var(--ease);
 }
 
 .ob-choice:hover {
-  border-color: var(--line-strong);
+  background: var(--surface-2);
 }
 
-/* 고른 것은 잉크로 칠한다 — 온보딩 한 화면에서 색이 켜지는 곳은 하단 "다음" 버튼뿐이다 */
+/* 고른 것 — 달력의 고른 구간과 **같은 언어**다. 띠 하나에 왼쪽 잉크 괘선.
+   예전에는 행 전체가 밝은 잉크 면이라 목록에서 그 한 줄만 등불처럼 떴다.
+   상태는 색만으로 말하지 않는다 — 괘선(형태) + 굵기 + aria-pressed 셋이 함께 간다. */
 .ob-choice[aria-pressed="true"] {
-  border-color: var(--ink);
-  background: var(--ink);
+  background: var(--sel-band);
+  box-shadow: inset var(--sp-1) 0 0 var(--ink);
 }
 
 .ob-choice__name {
@@ -2634,13 +2796,14 @@ button.tl-title::after {
   color: var(--muted);
 }
 
+/* 띠 위에서는 둘 다 잉크로 적는다 — 위계는 색이 아니라 **크기와 굵기**가 만든다 */
 .ob-choice[aria-pressed="true"] .ob-choice__name {
-  color: var(--bg);
+  color: var(--ink);
+  font-weight: var(--fw-bold);
 }
 
 .ob-choice[aria-pressed="true"] .ob-choice__meta {
-  color: var(--bg);
-  opacity: .78;
+  color: var(--ink);
 }
 
 /* 항공 스케줄 입력 (공항 select + datetime-local) */
@@ -2682,14 +2845,35 @@ button.tl-title::after {
   max-width: var(--content-max);
   margin: 0 auto;
   padding: var(--sp-3) var(--sp-4) calc(var(--sp-3) + var(--safe-b));
-  /* BUG-004 폴백 */
   background: var(--bg);
-  background: color-mix(in srgb, var(--bg) 90%, var(--surface));
   border-top: var(--hair) solid var(--line-strong);
 }
 
+/* 같은 크기의 큰 상자 둘이 아니다. **되돌아가는 길은 조용한 글자, 나아가는 길만 면이다.**
+   좌우가 대칭이면 어느 쪽이 다음 걸음인지 형태만으로는 알 수 없다 —
+   이 비대칭이 곧 위계다. 두 버튼 모두 44px 이상은 그대로 지킨다. */
+/* 주 버튼은 **줄 전체를 먹지 않는다.** 폭을 줄인 만큼 잉크 면의 면적이 줄고,
+   그만큼 화면의 주인공 자리가 제목과 날짜에게 돌아간다. 오른쪽 끝에 세워 엄지에 붙인다. */
+.ob-actions {
+  justify-content: space-between;
+}
+
 .ob-actions .btn--block {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
+  width: auto;
+  min-width: 168px;
+}
+
+.ob-actions .btn--block:not(.btn--primary) {
+  flex: 0 0 auto;
+  min-width: 0;
+  padding: 0 var(--sp-4);
+  border-color: var(--clear);
+  color: var(--muted);
+}
+
+.ob-actions .btn--block:not(.btn--primary):hover {
+  color: var(--ink);
 }
 
 /* ============================================================== 일정 탭 */
@@ -2869,9 +3053,7 @@ button.tl-title::after {
   position: sticky;
   top: 52px;
   z-index: 10;
-  /* BUG-004 폴백 */
   background: var(--bg);
-  background: color-mix(in srgb, var(--bg) 92%, var(--surface));
   padding: var(--sp-2) 0;
 }
 
@@ -3528,9 +3710,7 @@ button.tl-title::after {
 }
 
 .hs-result[aria-selected="true"] {
-  /* BUG-004 폴백 */
   background: var(--surface-2);
-  background: color-mix(in srgb, var(--ink) 8%, var(--surface));
 }
 
 /* 매치된 부분 하이라이트 */
@@ -3554,13 +3734,17 @@ button.tl-title::after {
   color: var(--muted);
 }
 
-/* 검색 결과 없을 때 "지도에서 직접 찍기" 유도 */
+/* 검색 결과 없을 때 "지역에서 직접 고르기" 유도.
+   점선 상자를 두르지 않는다 — 점선은 "여기에 뭔가 빠졌다"처럼 읽히는데, 이건 빠진 게
+   아니라 **두 번째 길**이다. 왼쪽 괘선 하나로 곁가지임을 알린다(.notice와 같은 언어). */
 .hs-fallback {
   display: grid;
+  justify-items: start;
   gap: var(--sp-2);
-  padding: var(--sp-4);
-  border: var(--hair) dashed var(--line-strong);
-  border-radius: var(--r-sm);
+  padding: var(--sp-1) 0 var(--sp-1) var(--sp-3);
+  border: 0;
+  border-left: var(--rule) solid var(--line);
+  border-radius: 0;
   font-size: var(--fs-sm);
   color: var(--muted);
 }
@@ -8143,12 +8327,27 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
    * 같은 함정이다 — 12:00을 눌러 두면 12:35가 12:00으로 굳는다.
    * 화면도 한 줄로 짧아진다(사용자 지적: 지금 UI가 복잡하다).
    *
-   * 대신 오입력 여지가 늘었으므로 검증을 세 갈래로 나눠 **입력 즉시** 알린다.
+   * 대신 오입력 여지가 늘었으므로 검증을 네 갈래로 나눠 **입력 즉시** 알린다.
    *   ① 형식·범위     그 칸 하나의 문제 → 그 칸 옆 `.field__error` (isTime)
-   *   ② 시각끼리 모순  도착 ≥ 출발 · 지원 박수 밖 → 미리보기 자리의 `.notice--danger` (timeIssue)
-   *   ③ 비어 있음      아직 안 한 것이지 틀린 것이 아니다 → 다음을 누를 때의 스텝 오류
+   *   ② 덜 채움        칸이 남았다 → 그 칸 옆 `.field__error` (BUG-028, isPartialTime)
+   *   ③ 시각끼리 모순  도착 ≥ 출발 · 지원 박수 밖 → 미리보기 자리의 `.notice--danger` (timeIssue)
+   *   ④ 비어 있음      아직 안 한 것이지 틀린 것이 아니다 → 다음을 누를 때의 스텝 오류
+   *
+   * ⚠ BUG-028 — `type="time"`의 value는 **"사용자가 넣은 것"이 아니라 "완성된 것"만** 준다.
+   *   12시간제 로캘(ko-KR)에서 이 칸은 [오전/오후][시]:[분] 세 칸으로 그려지고,
+   *   그중 하나라도 비면 value는 ''이고 **input·change 이벤트도 아예 오지 않는다.**
+   *   화면에는 `-- 12:00`처럼 숫자가 버젓이 남아 있는데 앱은 "안 넣었다"고 읽는다.
+   *   value만 보면 "아직 안 함"과 "넣다 만 것"을 가를 수 없다 —
+   *   이 둘을 갈라 주는 표준 신호는 `validity.badInput` 하나뿐이다.
    */
   const TIME_RE = /^(\d{1,2}):(\d{2})$/;
+
+  /**
+   * 덜 채운 시각 칸에 붙이는 한 문장 (BUG-028).
+   * **무엇이 왜 막혔는지**를 말한다 — "골라 주세요"는 사실이 아니다(사용자는 이미 넣었다).
+   */
+  const PARTIAL_TIME_MSG = '시각이 덜 채워졌습니다 — 오전/오후 · 시 · 분 칸을 모두 채워 주세요. ' +
+    '한 칸이라도 비어 있으면 숫자가 보여도 브라우저가 이 칸을 빈 값으로 넘깁니다.';
 
   /** 오류 문구에서 어느 칸을 말하는지 (화면 라벨과 같은 말을 쓴다) */
   const TIME_FIELD_KO = {
@@ -8224,6 +8423,11 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
       placeIds: [],
       range: { start: '', end: '' },
       times: { arrival: '', departure: '', flight: '', leave: '' },
+      /**
+       * 그 칸이 **넣다 만 상태**인가 (BUG-028). times[key]가 ''인 이유가
+       * "아직 안 했다"인지 "칸이 남았다"인지를 여기서만 구별한다.
+       */
+      timesPartial: { arrival: false, departure: false, flight: false, leave: false },
       arrival: { airportId: null, datetime: '' },
       departure: {
         mode: 'manual',      // 'manual'(직접 입력) | 'flight'(출국 시각에서 역산)
@@ -8481,6 +8685,48 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
   function isTime(hhmm) {
     const m = TIME_RE.exec(String(hhmm || ''));
     return !!m && Number(m[1]) <= 23 && Number(m[2]) <= 59;
+  }
+
+  /**
+   * 이 칸은 **넣다 만 상태**인가 (BUG-028).
+   *
+   * `type="time"`은 칸이 하나라도 비면 value로 ''을 준다 — 아무것도 안 넣은 칸과
+   * 똑같이 보인다. 브라우저가 그 둘을 갈라 주는 곳은 `validity.badInput` 뿐이다.
+   * `validity`가 없는 브라우저·폴백(text)에서는 badInput도 없으므로 false가 되고,
+   * 그 경우엔 화면이 값을 그대로 읽으므로 이 함수가 필요 없다.
+   *
+   * @param {Object} input 시각 입력칸
+   * @returns {boolean} 값은 못 읽는데 사용자가 무언가 넣어 둔 상태면 true
+   */
+  function isPartialTime(input) {
+    if (!input || input.value) return false;
+    return !!(input.validity && input.validity.badInput);
+  }
+
+  /** 화면에 지금 떠 있는 시각 입력칸 하나. 그 스텝이 아니면 null. */
+  function timeInputOf(key) {
+    if (!bodyEl || !bodyEl.querySelector) return null;
+    return bodyEl.querySelector('[data-field="time-' + key + '"]');
+  }
+
+  /**
+   * 화면의 시각 칸을 **다시 읽어** 상태에 반영한다.
+   *
+   * 이벤트가 온다는 보장이 없어서다 — `type="time"`은 칸이 덜 찼으면 input·change를
+   * 아예 쏘지 않고(BUG-028), 뒤로 가기 복원·자동 채움은 값을 넣으면서도 이벤트를
+   * 쏘지 않는다. **"다음"을 누르는 순간의 화면**이 사실이므로 그때 다시 읽는다.
+   *
+   * ⚠ `leave` 칸의 **값은** 읽지 않는다. 그 칸은 역산 제안값을 보여 주고 있을 수 있고,
+   *   제안값을 확정 입력으로 삼으면 engine 경고가 꺼진다 (BUG-018). 덜 찬 상태만 기록한다.
+   * @returns {void}
+   */
+  function syncTimesFromDom() {
+    for (const key in draft.times) {
+      const input = timeInputOf(key);
+      if (!input) continue;
+      draft.timesPartial[key] = isPartialTime(input);
+      if (key !== 'leave' && !draft.timesPartial[key]) draft.times[key] = input.value || '';
+    }
   }
 
   /**
@@ -8810,6 +9056,8 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
     input.id = id;
     input.type = 'time';
     input.value = draft.times[key] || '';
+    // 칸을 새로 그렸으면 화면은 draft 그대로다 — 덜 찬 상태는 여기서 초기화된다 (BUG-028).
+    draft.timesPartial[key] = false;
     input.setAttribute('data-field', 'time-' + key);
     input.setAttribute('inputmode', 'numeric');
     input.setAttribute('autocomplete', 'off');
@@ -8839,7 +9087,9 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
     detach(wrap.querySelector('.field__error'));
 
     const raw = draft.times[key];
-    const bad = !!raw && !isTime(raw);
+    // 덜 채운 칸이 먼저다 — 화면에 숫자가 보이는데 "형식이 틀렸다"고 하면 더 헷갈린다.
+    const partial = draft.timesPartial[key];
+    const bad = partial || (!!raw && !isTime(raw));
     wrap.className = bad ? 'field is-invalid' : 'field';
     if (!input) return;
 
@@ -8848,8 +9098,8 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
       input.setAttribute('aria-describedby', id + '-hint');
       return;
     }
-    const err = el('p', 'field__error',
-      '시각은 24시간제 HH:MM으로 넣어 주세요 — 오후 2시 35분은 14:35입니다. 지금 값: ' + raw);
+    const err = el('p', 'field__error', partial ? PARTIAL_TIME_MSG
+      : '시각은 24시간제 HH:MM으로 넣어 주세요 — 오후 2시 35분은 14:35입니다. 지금 값: ' + raw);
     err.id = id + '-err';
     err.setAttribute('role', 'alert');
     wrap.appendChild(err);
@@ -9673,6 +9923,10 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
     const tail = '을 고르면 날짜별로 다닐 수 있는 시간이 나옵니다.';
     if (!draft.arrival.airportId) return '도착하는 공항' + tail;
     if (!draft.range.start || !draft.range.end) return '달력에서 도착하는 날과 떠나는 날' + tail;
+    // 덜 채운 칸을 "아직 안 고른 것"이라고 부르지 않는다 (BUG-028).
+    for (const k in draft.timesPartial) {
+      if (draft.timesPartial[k]) return TIME_FIELD_KO[k] + ': ' + PARTIAL_TIME_MSG;
+    }
     if (!draft.times.arrival) return '도착 시각' + tail;
     return '숙소를 떠나는 시각(또는 비행기 출발 시각)' + tail;
   }
@@ -9856,6 +10110,7 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
     const arrival = d.arrival || {};
     const range = d.range || { start: dateOf(arrival.datetime), end: dateOf(arrival.datetime) };
     const times = d.times || { arrival: timeOf(arrival.datetime) };
+    const partial = d.timesPartial || {};
     const dep = d.departure || {};
 
     if (!arrival.airportId) {
@@ -9871,9 +10126,15 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
       return fail('여행 날짜를 달력에서 골라 주세요 — 도착하는 날과 떠나는 날을 차례로 누르면 됩니다.');
     }
 
+    // 덜 채운 칸이 가장 먼저다 (BUG-028). 화면에는 숫자가 보이는데 값은 ''이므로,
+    // 이걸 먼저 짚지 않으면 아래에서 "골라 주세요"라고 **사실이 아닌** 안내가 나간다.
+    const keys = ['arrival'].concat(dep.mode === 'flight' ? ['flight', 'leave'] : ['departure']);
+    for (const k of keys) {
+      if (partial[k]) return fail(TIME_FIELD_KO[k] + ': ' + PARTIAL_TIME_MSG);
+    }
+
     // 형식이 깨진 값은 "안 넣은 값"과 다르다. 먼저 짚어 줘야 "골라 주세요"라는
     // 엉뚱한 안내를 받지 않는다 (직접 입력이라 오타가 그대로 들어온다).
-    const keys = ['arrival'].concat(dep.mode === 'flight' ? ['flight', 'leave'] : ['departure']);
     for (const k of keys) {
       if (times[k] && !isTime(times[k])) {
         return fail(TIME_FIELD_KO[k] + '을 24시간제 HH:MM으로 넣어 주세요 (지금 값: ' + times[k] + ').');
@@ -10024,6 +10285,13 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
     if (!rootEl) return false;
     const list = steps();
     const step = list[stepIndex];
+    // 검증 직전에 시각 칸을 화면에서 다시 읽는다 (BUG-028). 이벤트가 왔을 것이라고
+    // 믿고 검증하면 "값이 있는데 없다"고 말하게 된다 — 판단의 근거는 지금의 화면이다.
+    if (step.id === 'schedule') {
+      syncTimesFromDom();
+      scheduleChanged();
+      for (const key in draft.times) syncTimeError(key);
+    }
     const result = validateStep(step.id, draft);
     if (!result.ok) {
       showError(result.message);
@@ -10240,6 +10508,8 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
     if (name.indexOf('time-') === 0) {
       const key = name.slice('time-'.length);
       draft.times[key] = value;
+      // input·change가 왔다는 것은 값이 완성됐다는 뜻이다 (BUG-028).
+      draft.timesPartial[key] = false;
       // 형식이 깨졌으면 **입력 즉시** 그 칸 옆에서 말한다 (다음을 누를 때까지 기다리지 않는다).
       syncTimeError(key);
       // 입력칸 자체는 건드리지 않는다 — 값을 다시 써 넣으면 커서가 튄다 (BUG-008 계열).
@@ -10274,6 +10544,30 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
       const out = bodyEl.querySelector ? bodyEl.querySelector('#ob-w-' + key + '-out') : null;
       if (out) out.textContent = String(draft.prefs[key]);
     }
+  }
+
+  /**
+   * **덜 채운 시각 칸을 알아채는 유일한 통로** (BUG-028).
+   *
+   * `type="time"`은 칸이 덜 찼으면 input·change를 쏘지 않는다. 하지만 keyup은 오고
+   * (칸을 옮겨 다니며 숫자를 치는 동안 계속), 칸을 떠날 때 focusout도 온다.
+   * 그래서 값이 아니라 **"덜 찼는가"만** 여기서 읽는다 — 값은 여전히 input·change가
+   * 정하고, 그래야 `leave` 칸의 제안값이 확정 입력으로 새어 들어가지 않는다 (BUG-018).
+   */
+  function onTimeProbe(ev) {
+    const target = ev.target;
+    if (!target || !target.getAttribute) return;
+    const name = target.getAttribute('data-field');
+    if (!name || name.indexOf('time-') !== 0) return;
+    const key = name.slice('time-'.length);
+    if (!(key in draft.timesPartial)) return;
+
+    const partial = isPartialTime(target);
+    if (partial === draft.timesPartial[key]) return;
+    draft.timesPartial[key] = partial;
+    syncTimeError(key);
+    // 덜 찬 칸이 생겼으면 스텝 오류로 걸어 둔 안내는 낡았다 — 그 칸 옆 문장이 대신 말한다.
+    clearError();
   }
 
   // ------------------------------------------------------------------ 렌더
@@ -10399,6 +10693,9 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
     rootEl.addEventListener('keydown', onKeydown);
     rootEl.addEventListener('input', onFieldEvent);
     rootEl.addEventListener('change', onFieldEvent);
+    // 값이 아니라 "덜 찼는가"를 줍는 통로 — type="time"이 이벤트를 안 쏘기 때문이다 (BUG-028).
+    rootEl.addEventListener('keyup', onTimeProbe);
+    rootEl.addEventListener('focusout', onTimeProbe);
 
     mountedStepId = null;
     render();
@@ -10414,6 +10711,8 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/shell.js");
       rootEl.removeEventListener('keydown', onKeydown);
       rootEl.removeEventListener('input', onFieldEvent);
       rootEl.removeEventListener('change', onFieldEvent);
+      rootEl.removeEventListener('keyup', onTimeProbe);
+      rootEl.removeEventListener('focusout', onTimeProbe);
     }
     if (TP.hotelSearch && typeof TP.hotelSearch.unmount === 'function') TP.hotelSearch.unmount();
     ctx = null;
