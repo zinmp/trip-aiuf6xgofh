@@ -2504,42 +2504,79 @@ button.tl-title::after {
    색은 data-line="<lineId>" 하나로 붙는다 — tokens.css가 --rt-line을 세팅하고,
    매핑에 없는 노선은 --line-default로 조용히 떨어진다. */
 
+/* 여행지에서 이 화면을 여는 순간의 질문은 하나다 — **"지금 뭘 타야 하지?"**
+   그 답이 스크롤을 멈춘 자리에서 바로 읽혀야 한다. 그래서 탑승 구간은 한 줄로 이어
+   붙이지 않고 블록으로 세운다: 노선 → 승·하차역 → 정거장·분 → 방면 순으로 위계가 내려간다.
+   (예전에는 넷이 한 줄에 ` · `로 붙어 있어서, 정작 노선 이름이 그 행에서 가장 작은 글씨였다.) */
+
 .rt-legs {
   display: grid;
-  gap: var(--sp-1);
+  gap: var(--sp-2);
   min-width: 0;
 }
 
+/* 노선색을 싣는 **면**이다 — 좌측 6px 레일은 .tl-rail::before와 같은 굵기·같은 둥근 끝이라
+   타임라인 본선과 한 조형으로 읽힌다. 색은 여기와 기호 칩 테두리가 나르고, 글자는 나르지 않는다. */
 .rt-leg {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--sp-1) var(--sp-2);
+  display: grid;
+  gap: 3px;
+  justify-items: start;
   min-width: 0;
-  padding-left: var(--sp-2);
-  border-left: var(--rule) solid var(--rt-line, var(--line-default));
+  padding: var(--sp-1) 0 var(--sp-1) var(--sp-3);
+  border-left: 6px solid var(--rt-line, var(--line-default));
+  border-radius: 3px;
   font-size: var(--fs-xs);
 }
 
-/* 노선 기호 (M · O …). 승강장 표지판처럼 각진 사각 */
+.rt-leg__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+
+/* 노선 기호 (M · O …). 승강장 표지판처럼 각진 사각.
+   ⚠ 속을 채우지 않는다 — .tl-num과 같은 이유다. 26개 노선색은 명도 폭이 넓어
+   그 위에 얹을 글자색을 하나로 고를 수 없다. 속을 비우면 기호는 언제나 --ink on --surface다. */
 .rt-leg__code {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 17px;
-  height: 17px;
-  padding: 0 3px;
-  border: var(--hair) solid var(--rt-line, var(--line-default));
+  min-width: 22px;
+  height: 22px;
+  padding: 0 4px;
+  border: var(--rule) solid var(--rt-line, var(--line-default));
   border-radius: var(--r-xs);
-  color: var(--rt-line, var(--line-default));
-  font-size: var(--fs-2xs);
-  font-weight: var(--fw-bold);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-black);
   line-height: 1;
 }
 
+/* 이 행에서 제일 큰 글씨 = 타야 할 노선 이름.
+   ⚠ 노선색으로 칠하지 않는다 — 라이트 모드에서 26색 중 12색이 본문 대비 4.5:1을 못 넘는다
+   (한신 난바선 #9E811E → 3.74:1). 색은 왼쪽 레일이 이미 말하고 있다. */
 .rt-leg__line {
+  min-width: 0;
+  font-size: var(--fs-md);
+  font-weight: var(--fw-black);
+  line-height: var(--lh-tight);
+  color: var(--ink);
+}
+
+/* 어디서 타서 어디서 내리나 — 노선 다음으로 급한 정보 */
+.rt-leg__ride {
+  min-width: 0;
+  font-size: var(--fs-sm);
   font-weight: var(--fw-bold);
-  color: var(--rt-line, var(--line-default));
+  color: var(--ink);
+}
+
+.rt-leg__arrow {
+  color: var(--faint);
+  font-weight: var(--fw-normal);
 }
 
 .rt-leg__seg {
@@ -2549,6 +2586,51 @@ button.tl-title::after {
 
 .rt-leg__seg .num {
   color: var(--ink);
+}
+
+/* 방면 — 승강장 표지판에서 눈으로 대조할 문자열이라 테두리로 따로 떼어 둔다.
+   ⚠ 역방향에서는 틀린 정보라 JS가 아예 그리지 않는다 (UI_CONTRACT §4.14). */
+.rt-leg__dir {
+  padding: 2px var(--sp-2);
+  border: var(--hair) solid var(--line-strong);
+  border-radius: var(--r-xs);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-bold);
+  color: var(--ink);
+}
+
+/* 도보는 노선이 아니다 — 색을 받지 않고 점선 레일로 갈린다.
+   지도 탭이 "실선 = 지역 간 이동(노선색) · 점선 = 도보"라고 이미 말하고 있으므로 같은 말이다. */
+.rt-leg--walk {
+  border-left: var(--rule) dashed var(--line-strong);
+  padding-left: calc(var(--sp-3) + 4px);
+  border-radius: 0;
+}
+
+.rt-leg--walk .rt-leg__line {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--muted);
+}
+
+.rt-leg--walk .rt-leg__line .num {
+  color: var(--ink);
+}
+
+/* 환승 지점 — 구간과 구간 사이에서 "여기서 갈아탄다"를 말한다 */
+.rt-transfer {
+  padding-left: var(--sp-3);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--muted);
+}
+
+/* 지도 탭의 "오늘 타는 노선" 범례 — 같은 부품을 가로로 눕힌 것뿐이다.
+   지도가 노선을 색으로 긋는데 그 색이 무슨 노선인지 화면 어디에도 없으면 색이 뜻을 못 싣는다. */
+.rt-legs--inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
 }
 
 /* ══════════ app/src/styles/views.css ══════════ */
@@ -11437,6 +11519,22 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
   /** 구글맵은 좌표가 있으면 좌표로, 없으면 검색어로 연다. */
   const MAPS_URL = 'https://www.google.com/maps/search/?api=1&query=';
 
+  /**
+   * 구글맵 **길찾기**. 위의 search와 다른 물건이다 — search는 "이 장소 보기"이고
+   * 이쪽은 출발지·목적지·이동 수단을 채워 **안내를 바로 시작시킨다**.
+   *
+   * 파라미터는 구글 공식 문서(Google Maps URLs, "Directions" 모드)에 정의된 것만 쓴다:
+   *   `dir/?api=1` + `origin` + `destination` + `travelmode`
+   *   · origin·destination은 장소명·주소·`위도,경도` 중 아무거나 받는다 → 우리는 **좌표 우선**
+   *     (장소명은 동명이 있어 엉뚱한 곳이 열릴 수 있다)
+   *   · travelmode는 driving|walking|bicycling|two-wheeler|transit 다섯뿐이다 → 우리는 transit
+   *   · **origin을 비우면 구글맵이 기기의 현재 위치를 출발지로 잡는다** — 그래서 위치를
+   *     못 얻는 환경에서도 링크가 죽지 않는다
+   * `dir_action=navigate`(턴바이턴 즉시 시작)는 쓰지 않는다. 대중교통에서는 무엇을 탈지
+   * 사용자가 고르는 화면이 먼저 와야 하고, 잘못 누른 링크가 곧바로 안내를 시작하면 되돌리기 어렵다.
+   */
+  const MAPS_DIR_URL = 'https://www.google.com/maps/dir/?api=1';
+
   const SHEET_TITLE_ID = 'tp-itin-sheet-title';
 
   // --------------------------------------------------------------- 모듈 상태
@@ -11449,7 +11547,7 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
   let bound = null;        // 해제해야 할 리스너 목록
 
   /** 직전 렌더 입력. 무엇이 바뀌었는지 보고 필요한 영역만 다시 그린다 (BUG-008). */
-  let last = { plan: null, dayIndex: -1, done: null, fx: null };
+  let last = { plan: null, dayIndex: -1, done: null, fx: null, geoOn: false };
 
   let sheetStopId = null;  // 열려 있는 스톱 (없으면 닫힌 상태)
   let sheetReturn = null;  // 시트를 열기 전 포커스를 갖고 있던 엘리먼트
@@ -11644,22 +11742,126 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
   }
 
   /**
-   * 이동 스톱의 출발·도착 권역. engine의 transit 스톱에는 권역 id가 없고
-   * (title은 사람이 읽을 문자열뿐) **바로 앞뒤의 목적지 스톱이 곧 그 권역이다**
+   * 이동 스톱의 출발·도착 지점. engine의 transit 스톱에는 권역 id도 장소도 없고
+   * (title은 사람이 읽을 문자열뿐) **바로 앞뒤의 목적지 스톱이 곧 그 지점이다**
    * — dayPlan.pushStop이 그렇게 끼워 넣는다. 앞에 목적지가 없으면 그날의 출발점(숙소)이다.
+   * @returns {Object|null} place 또는 숙소 객체 ({name, areaId, coords?})
    */
-  function areaBefore(list, i) {
+  function placeBefore(list, i) {
     for (let k = i - 1; k >= 0; k--) {
-      if (list[k].kind === 'stop' && list[k].place) return list[k].place.areaId;
+      if (list[k].kind === 'stop' && list[k].place) return list[k].place;
     }
-    return (st && st.trip && st.trip.hotel && st.trip.hotel.areaId) || '';
+    return (st && st.trip && st.trip.hotel) || null;
+  }
+
+  /** 바로 뒤의 목적지. 없으면 null (그날의 마지막 이동 뒤에는 목적지가 없다). */
+  function placeAfter(list, i) {
+    for (let k = i + 1; k < list.length; k++) {
+      if (list[k].kind === 'stop' && list[k].place) return list[k].place;
+    }
+    return null;
+  }
+
+  function areaBefore(list, i) {
+    const p = placeBefore(list, i);
+    return (p && p.areaId) || '';
   }
 
   function areaAfter(list, i) {
-    for (let k = i + 1; k < list.length; k++) {
-      if (list[k].kind === 'stop' && list[k].place) return list[k].place.areaId;
-    }
-    return '';
+    const p = placeAfter(list, i);
+    return (p && p.areaId) || '';
+  }
+
+  // ------------------------------------------------- 길찾기 (구글맵으로 넘기기)
+  //
+  // **앱 안에서 경로를 탐색하지 않는다.** 실시간 턴바이턴은 경로 탐색 서비스(유료 API·키
+  // 관리)가 필요하고, 키를 번들에 넣으면 그대로 공개되며, 오프라인에서도 동작해야 한다는
+  // 이 앱의 전제와 정면으로 부딪힌다. 대신 **출발지·목적지·이동 수단을 채운 구글맵 링크**로
+  // 넘긴다 — 사용자는 한 번 눌러 바로 안내를 받고, 우리는 지어낸 경로를 그리지 않는다.
+  //
+  // 링크는 `target="_blank"`다 — file://(APK)에서는 shell.installLinkDelegate가 위임한다(BUG-003).
+
+  /**
+   * 구글맵에 넘길 지점 표기.
+   *
+   * **좌표가 첫째다.** 다음은 `place.q` — 데이터가 구글맵용으로 따로 적어 둔 검색어다.
+   * ⚠ 그 둘이 없으면 **빈 문자열**이고 링크를 만들지 않는다. `place.name`·숙소 이름으로
+   *   물러서지 않는 이유는 그것이 사람이 입력한 한국어 이름이라 —
+   *   "난바 호텔"처럼 — 구글맵에서 엉뚱한 곳이 열리기 때문이다. 잘못 여는 링크는
+   *   없느니만 못하다. 출발지 자리가 비면 구글맵이 기기 위치를 잡으므로 손해도 없다.
+   * @param {Object} o place · 숙소처럼 coords를 품은 객체
+   * @returns {string} 못 만들면 빈 문자열
+   */
+  function mapsQuery(o) {
+    if (!o || typeof o !== 'object') return '';
+    const c = o.coords;
+    if (c && typeof c.lat === 'number' && typeof c.lng === 'number') return c.lat + ',' + c.lng;
+    return String(o.q || '');
+  }
+
+  /**
+   * 길찾기 URL. origin이 비면 넣지 않는다 — 그때는 구글맵이 기기 현재 위치를 잡는다.
+   * @param {string} origin `"위도,경도"` 또는 검색어. 빈 문자열이면 생략
+   * @param {string} dest   같은 형식. **필수**
+   * @param {string} mode   'transit' | 'walking'
+   */
+  function dirHref(origin, dest, mode) {
+    let url = MAPS_DIR_URL;
+    if (origin) url += '&origin=' + encodeURIComponent(origin);
+    return url + '&destination=' + encodeURIComponent(dest) + '&travelmode=' + mode;
+  }
+
+  /** 위치가 켜져 있는가. 이 값이 뒤집히면 길찾기 출발지가 통째로 바뀐다(→ render). */
+  function geoIsOn() {
+    const geo = eng('geo');
+    return !!(geo && typeof geo.isOn === 'function' && geo.isOn());
+  }
+
+  /** 현재 위치를 출발지로 쓸 수 있으면 `"위도,경도"`, 아니면 빈 문자열. */
+  function hereQuery() {
+    const pos = geoIsOn() ? eng('geo').current() : null;
+    return pos ? pos.coords.lat + ',' + pos.coords.lng : '';
+  }
+
+  /**
+   * 출발지 — ① 현재 위치가 잡히면 그것 ② 아니면 직전 스톱(없으면 숙소).
+   * 둘 다 없으면 빈 값이고, 그때는 구글맵이 기기 위치를 잡는다.
+   * @returns {{q:string, label:string}}
+   */
+  function originAt(list, i) {
+    const here = hereQuery();
+    if (here) return { q: here, label: '현재 위치' };
+    const prev = placeBefore(list, i);
+    const q = mapsQuery(prev);
+    return q ? { q: q, label: prev.name || '직전 일정' } : { q: '', label: '' };
+  }
+
+  /**
+   * 길찾기 링크 한 개. 목적지를 못 만들면 빈 문자열이다 — 엉뚱한 곳을 여느니 없는 편이 낫다.
+   * @param {string} origin originAt(...).q
+   * @param {Object} dest   목적지 place
+   * @param {string} mode   'transit' | 'walking'
+   * @param {string} label  버튼 문구
+   */
+  function dirLink(origin, dest, mode, label) {
+    const to = mapsQuery(dest);
+    if (!to) return '';
+    return '<a class="btn btn--ghost btn--sm" href="' + esc(dirHref(origin, to, mode || 'transit'))
+      + '" target="_blank" rel="noopener">' + esc(label) + '</a>';
+  }
+
+  /**
+   * 이동 스톱에 붙는 길찾기 줄 — 버튼 + **출발지가 어디인지**.
+   * 출발지를 적지 않으면 "여기가 어디 기준이지?"를 사용자가 풀 수 없다.
+   */
+  function dirRowHTML(list, i) {
+    const dest = placeAfter(list, i);
+    const org = originAt(list, i);
+    const link = dirLink(org.q, dest, 'transit', '구글맵 길찾기');
+    if (!link) return '';
+    return '<span class="tl-meta">' + link
+      + '<span>' + esc(org.q ? '출발 · ' + org.label : '출발 · 구글맵이 잡는 현재 위치') + '</span>'
+      + '</span>';
   }
 
   /** ⚠ 문자열이 아니라 STAMINA 프로파일 객체다 (INTERFACE_CHECK M11). */
@@ -11885,7 +12087,10 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
       + '<p class="itin-geo__detail">' + etaDetail(est, near, place) + '</p>'
       + '<p class="source">' + esc(geo.ESTIMATE_NOTE) + '</p>' + here
       + '<p class="itin-geo__actions">'
-      + '<a class="btn btn--ghost btn--sm" href="' + esc(mapsHref(place)) + '" target="_blank" rel="noopener">길찾기</a>'
+      // 이동 수단은 **engine·geo가 이미 내린 판정**을 그대로 따른다 —
+      // 같은 권역이면 걸어가는 거리(basis==='walk')이고, 아니면 대중교통이다.
+      // 여기서 다시 판정하지 않는다 (ARCHITECTURE §1).
+      + dirLink(hereQuery(), place, est.basis === 'walk' ? 'walking' : 'transit', '구글맵 길찾기')
       + off + '</p>'
     );
   }
@@ -11958,18 +12163,31 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
     }
     p.then(function () {
       geoBusy = false;
-      if (rootEl) renderGeo();
+      afterGeo();
     }, function () {
       // geo.request는 reject하지 않지만, 계약이 깨져도 화면이 "확인 중"에 갇히지 않게 한다.
       geoBusy = false;
-      if (rootEl) renderGeo();
+      afterGeo();
     });
   }
 
   function forgetGeo() {
     const geo = eng('geo');
     if (geo) geo.forget();
-    renderGeo();
+    afterGeo();
+  }
+
+  /**
+   * 위치를 켜거나 끈 **뒤**의 갱신.
+   *
+   * 켜짐 여부가 뒤집혔으면 타임라인의 길찾기 출발지가 통째로 달라지므로(현재 위치 ↔ 직전
+   * 스톱) 화면 전체를 다시 맞추고, 그렇지 않으면 내 위치 영역만 다시 그린다.
+   * render()는 바뀐 영역만 갈아 끼우므로 여기서 전체를 불러도 나머지 DOM은 그대로 남는다.
+   */
+  function afterGeo() {
+    if (!rootEl) return;
+    if (geoIsOn() !== last.geoOn) render(st);
+    else renderGeo();
   }
 
   /**
@@ -12174,7 +12392,7 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
 
     if (!plan || !days.length) {
       renderEmpty(plan);
-      last = { plan: plan, dayIndex: -1, done: st.done, fx: st.fx };
+      last = { plan: plan, dayIndex: -1, done: st.done, fx: st.fx, geoOn: geoIsOn() };
       return;
     }
 
@@ -12182,6 +12400,11 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
     const dayChanged = dayIndex !== last.dayIndex;
     const doneChanged = st.done !== last.done;
     const fxChanged = st.fx !== last.fx;
+    // 위치를 켜고 끄면 **길찾기 출발지**가 바뀐다(현재 위치 ↔ 직전 스톱). store 밖의
+    // 세션 상태라 참조 비교로는 안 잡히므로 켜짐 여부를 직접 기억해 둔다.
+    // 한 세션에 많아야 두어 번 뒤집히므로 이 계기로 다시 그려도 값이 싸다.
+    const geoOn = geoIsOn();
+    const geoChanged = geoOn !== last.geoOn;
 
     if (planChanged) {
       swap(els.globalNotes, globalNotesHTML(plan));
@@ -12198,12 +12421,16 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
       swap(els.timeline, renderTimeline(day));
       indexRows();
       syncDone();
+    } else if (geoChanged) {
+      swap(els.timeline, renderTimeline(day));   // 링크가 든 타임라인만 (헤더·안내는 그대로)
+      indexRows();
+      syncDone();
     } else if (doneChanged) {
       syncDone();                    // 체크만 — DOM을 새로 만들지 않으므로 포커스가 유지된다
       renderProgress(day);
     }
 
-    if (sheetStopId && (planChanged || fxChanged)) {
+    if (sheetStopId && (planChanged || fxChanged || geoChanged)) {
       if (findStop(sheetStopId)) renderSheetBody();
       else closeSheet();
     } else if (sheetStopId && doneChanged) {
@@ -12214,7 +12441,7 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
     // 내용이 그대로면 renderGeo가 DOM을 건드리지 않는다.
     renderGeo();
 
-    last = { plan: plan, dayIndex: dayIndex, done: st.done, fx: st.fx };
+    last = { plan: plan, dayIndex: dayIndex, done: st.done, fx: st.fx, geoOn: geoOn };
   }
 
   /** 일정이 아직 없을 때. 안내는 남기되 앱은 살아 있어야 한다. */
@@ -12432,8 +12659,11 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
     return out;
   }
 
-  /** 이동·코인로커 — place도 endTime도 없다. 점 없는 점선 레일 / 사각 마커. */
-  function plainRow(modifier, stop) {
+  /**
+   * 이동·코인로커 — place도 endTime도 없다. 점 없는 점선 레일 / 사각 마커.
+   * @param {string} [extra] .tl-body 맨 아래에 덧붙일 HTML (이동 스톱의 길찾기 줄)
+   */
+  function plainRow(modifier, stop, extra) {
     const meta = [];
     if (typeof stop.duration === 'number') meta.push('<span class="num">' + esc(ctx.format.duration(stop.duration)) + '</span>');
     if (stop.desc) meta.push(esc(stop.desc));
@@ -12443,6 +12673,7 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
       + '<span class="tl-body">'
       +   '<span class="tl-head"><span class="tl-title">' + esc(stop.title) + '</span></span>'
       +   (meta.length ? '<span class="tl-meta">' + meta.join(' · ') + '</span>' : '')
+      +   (extra || '')
       + '</span>'
       + '</li>';
   }
@@ -12457,39 +12688,27 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
    *   노선 목록·안내는 전부 .tl-body 안으로 들어간다.
    */
   function transitRow(list, i, stop) {
+    const dir = dirRowHTML(list, i);
     const info = routeBetween(areaBefore(list, i), areaAfter(list, i));
-    if (!info) return plainRow('tl-stop--move', stop);
+    if (!info) return plainRow('tl-stop--move', stop, dir);
 
     const pair = info.pair;
+    // 맨 윗줄은 **총량**만 — "얼마나 걸리고 얼마 드나". 무엇을 타는지는 아래 노선 블록이 말한다.
+    // 도보는 여기서 빼고 아래 도보 블록으로 내린다 (대중교통과 뚜렷이 갈리게).
     const meta = [];
     if (typeof stop.duration === 'number') meta.push('<span class="num">' + esc(ctx.format.duration(stop.duration)) + '</span>');
     if (typeof pair.cost === 'number') meta.push('<span class="num">' + esc(ctx.format.yen(pair.cost)) + '</span>');
     if (typeof pair.transfers === 'number') {
       meta.push(pair.transfers > 0 ? '환승 <span class="num">' + pair.transfers + '회</span>' : '직통');
     }
-    if (typeof pair.walkMinutes === 'number') {
-      meta.push('도보 <span class="num">' + esc(ctx.format.duration(pair.walkMinutes)) + '</span>');
-    }
 
     const legs = info.reversed ? pair.legs.slice().reverse() : pair.legs;
     let legsHTML = '';
     for (let k = 0; k < legs.length; k++) {
-      const leg = legs[k];
-      const line = info.lines[leg.lineId];
-      const from = info.reversed ? leg.to : leg.from;
-      const to = info.reversed ? leg.from : leg.to;
-      const seg = [];
-      if (from && to) seg.push(esc(from) + ' → ' + esc(to));
-      if (typeof leg.stops === 'number') seg.push('<span class="num">' + leg.stops + '</span>정거장');
-      if (typeof leg.minutes === 'number') seg.push('<span class="num">' + esc(ctx.format.duration(leg.minutes)) + '</span>');
-      // 방면은 승강장 표지의 행선지라 반대 방향에서는 틀린 정보가 된다 — 뒤집었으면 뺀다.
-      if (leg.direction && !info.reversed) seg.push(esc(leg.direction));
-      legsHTML += '<span class="rt-leg" data-line="' + esc(leg.lineId) + '">'
-        + (line && line.code ? '<span class="rt-leg__code">' + esc(line.code) + '</span>' : '')
-        + '<span class="rt-leg__line">' + esc((line && line.name) || '노선 정보 없음') + '</span>'
-        + (seg.length ? '<span class="rt-leg__seg">' + seg.join(' · ') + '</span>' : '')
-        + '</span>';
+      if (k > 0) legsHTML += transferHTML(legs[k - 1], legs[k], info.reversed);
+      legsHTML += legHTML(legs[k], info);
     }
+    legsHTML += walkLegHTML(pair);
 
     return '<li class="tl-stop tl-stop--move">'
       + '<span class="tl-time">' + esc(stop.time) + '</span>'
@@ -12499,8 +12718,70 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
       +   (meta.length ? '<span class="tl-meta">' + meta.join(' · ') + '</span>' : '')
       +   '<span class="rt-legs">' + legsHTML + '</span>'
       +   (pair.note ? '<span class="tl-desc">' + esc(pair.note) + '</span>' : '')
+      +   dir
       + '</span>'
       + '</li>';
+  }
+
+  /**
+   * 탑승 구간 하나. **"뭘 타고 어디서 타서 어디서 내리나"가 1차 정보**라 세 줄로 나눈다 —
+   * 예전에는 이 셋이 한 줄에 ` · `로 이어 붙어 있어서 그 행에서 가장 작은 글씨가 됐다.
+   *   ① 노선(기호 + 이름)  ② 승차역 → 하차역  ③ 정거장 수·분  ④ 방면
+   * ⚠ 노선 이름은 **--ink**로 쓴다. 노선색을 글자에 얹으면 26색 중 12색이 라이트 모드에서
+   *   4.5:1을 못 넘는다(예: 한신 난바선 #9E811E → 3.74:1). 색은 좌측 6px 레일과 기호 칩의
+   *   테두리가 싣는다 — `.tl-num`이 "속을 비워 대비를 계산에서 빼는" 것과 같은 처리다.
+   */
+  function legHTML(leg, info) {
+    const line = info.lines[leg.lineId];
+    const from = info.reversed ? leg.to : leg.from;
+    const to = info.reversed ? leg.from : leg.to;
+    const seg = [];
+    if (typeof leg.stops === 'number') seg.push('<span class="num">' + leg.stops + '</span>정거장');
+    if (typeof leg.minutes === 'number') seg.push('<span class="num">' + esc(ctx.format.duration(leg.minutes)) + '</span>');
+
+    return '<span class="rt-leg" data-line="' + esc(leg.lineId) + '">'
+      + '<span class="rt-leg__head">'
+      +   (line && line.code ? '<span class="rt-leg__code">' + esc(line.code) + '</span>' : '')
+      +   '<span class="rt-leg__line">' + esc((line && line.name) || '노선 정보 없음') + '</span>'
+      + '</span>'
+      + (from && to
+        ? '<span class="rt-leg__ride">' + esc(from) + ' 승차 <span class="rt-leg__arrow">→</span> '
+          + esc(to) + ' 하차</span>'
+        : '')
+      + (seg.length ? '<span class="rt-leg__seg">' + seg.join(' · ') + '</span>' : '')
+      // 방면은 승강장 표지의 행선지라 반대 방향에서는 틀린 정보가 된다 — 뒤집었으면 뺀다.
+      + (leg.direction && !info.reversed
+        ? '<span class="rt-leg__dir">' + esc(leg.direction) + '</span>' : '')
+      + '</span>';
+  }
+
+  /**
+   * 환승 지점 — "어디서 갈아타는가". **데이터에 적힌 역명 그대로**만 말한다.
+   * 내린 역과 타는 역이 다르면(오사카 → 히가시우메다처럼) 걸어서 옮긴다는 뜻이므로 그렇게 적는다.
+   * 플랫폼 번호·환승 통로 이름은 데이터에 없으므로 지어내지 않는다.
+   */
+  function transferHTML(prev, next, reversed) {
+    const off = reversed ? prev.from : prev.to;
+    const on = reversed ? next.to : next.from;
+    if (!off && !on) return '';
+    const text = (off && on && off !== on)
+      ? off + '에서 내려 ' + on + '까지 걸어가 갈아탑니다'
+      : (off || on) + '에서 갈아탑니다';
+    return '<span class="rt-transfer">' + esc(text) + '</span>';
+  }
+
+  /**
+   * 도보 구간 — `pairs[].walkMinutes`는 **legs 밖 도보의 합**이다(SCHEMA §6).
+   * 어느 구간의 몇 분인지는 데이터에 없으므로 위치를 지어내지 않고 "합"이라고 밝힌다.
+   * 노선색을 받지 않는 점선 블록이라 탑승 구간과 한눈에 갈린다.
+   */
+  function walkLegHTML(pair) {
+    if (typeof pair.walkMinutes !== 'number' || pair.walkMinutes <= 0) return '';
+    return '<span class="rt-leg rt-leg--walk">'
+      + '<span class="rt-leg__head"><span class="rt-leg__line">도보 <span class="num">'
+      + esc(ctx.format.duration(pair.walkMinutes)) + '</span></span></span>'
+      + '<span class="rt-leg__seg">역까지 가고 갈아타며 걷는 시간을 합한 값입니다</span>'
+      + '</span>';
   }
 
   /**
@@ -12782,14 +13063,20 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
       if (tags.length) out.push(section('가기 전에', '<p class="row">' + tags.join('') + '</p>'));
     }
 
-    // ⑤ 액션 — 다녀옴 · 지도 · 예약 페이지
+    // ⑤ 액션 — 다녀옴 · 길찾기 · 지도 · 예약 페이지
+    //   길찾기와 "구글 지도"는 다른 물건이라 **둘 다 남긴다** — 앞은 여기까지 가는 법,
+    //   뒤는 이 장소 자체(사진·영업시간·리뷰)를 보는 것이다.
+    const org = originAt(day.stops, day.stops.indexOf(stop));
     let actions = '<button type="button" class="chip" data-action="toggle-done" data-stop-id="' + esc(id) + '"'
       + ' aria-pressed="' + (isDone(id) ? 'true' : 'false') + '">다녀옴</button>'
+      + dirLink(org.q, place, 'transit', '여기까지 길찾기')
       + '<a class="btn btn--ghost btn--sm" href="' + esc(mapsHref(place)) + '" target="_blank" rel="noopener">구글 지도</a>';
     if (place.ticketUrl) {
       actions += '<a class="btn btn--ghost btn--sm" href="' + esc(place.ticketUrl) + '" target="_blank" rel="noopener">예약·티켓</a>';
     }
-    out.push('<div class="row">' + actions + '</div>');
+    out.push('<div class="row">' + actions + '</div>'
+      + '<p class="source">' + esc(org.q ? '길찾기 출발지는 ' + org.label + '입니다.'
+        : '길찾기 출발지는 구글맵이 잡는 현재 위치입니다.') + '</p>');
 
     // ⑥ 대안 3개
     const alts = alternativesFor(day, stop);
@@ -13292,7 +13579,7 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/venueGuide.js");
     // 여기서는 이 뷰의 표시 상태만 되돌린다.
     geoBusy = false;
     lastGeoHTML = null;
-    last = { plan: null, dayIndex: -1, done: null, fx: null };
+    last = { plan: null, dayIndex: -1, done: null, fx: null, geoOn: false };
   }
 
   return {
@@ -14988,6 +15275,7 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/viewExplore.js");
   let geoEl = null;         // .map-geo           (위치 추적 켜기/끄기 칩)
   let geoNoteEl = null;     // .map-geo__note     (형태 설명 · 개인정보 · 한계 표기)
   let actorsEl = null;      // .map-actors        (캐릭터 고르기 칩 줄)
+  let linesEl = null;       // .rt-legs--inline  (오늘 타는 노선 범례 — 색과 이름을 잇는다)
   let noteEl = null;        // .source (축척·노선 고지)
   let listHeadEl = null;    // .section__aside
   let listEl = null;        // .tl
@@ -15002,6 +15290,7 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/viewExplore.js");
   let lastPlanRef = null;   // 일정 객체 자체가 바뀌었는지 (문자열 키로는 못 본다)
   let lastTripRef = null;
   let lastNavKey = null;    // 날짜 칩을 다시 만들어야 하는지
+  let lastLinesKey = null;  // 오늘 타는 노선 범례를 다시 만들어야 하는지
   let lastZoomKey = null;   // 줌 칩의 상태만 갈아 끼우면 되는지
   let baseLabels = [];      // 바탕 레이어가 이미 차지한 자리 (숙소 마커·라벨)
   let areaSpots = [];       // 지역명을 앉힐 후보 자리 — 라벨은 동선 레이어에서 그린다
@@ -15913,11 +16202,17 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/viewExplore.js");
     return best ? safeLineId(best.lineId) : null;
   }
 
-  function lineName(cityId, lineId) {
+  /** `lines[]` 항목 하나. 없으면 null (그러면 이름 자리에 id가 그대로 간다). */
+  function lineOf(cityId, lineId) {
     const bundle = routeBundle(cityId);
     const list = (bundle && Array.isArray(bundle.lines)) ? bundle.lines : [];
-    for (let i = 0; i < list.length; i++) if (list[i] && list[i].id === lineId) return list[i].name || lineId;
-    return lineId;
+    for (let i = 0; i < list.length; i++) if (list[i] && list[i].id === lineId) return list[i];
+    return null;
+  }
+
+  function lineName(cityId, lineId) {
+    const line = lineOf(cityId, lineId);
+    return (line && line.name) || lineId;
   }
 
   /**
@@ -16104,9 +16399,23 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/viewExplore.js");
         out0.walks++;
       } else {
         out0.rides++;
-        if (lineId && !seen[lineId]) {
-          seen[lineId] = 1;
-          out0.lines.push(lineId);
+        // ⚠ 색은 구간당 하나(dominantLine)지만 **실제로 타는 노선은 그 구간의 legs 전부**다.
+        //   "오늘 타는 노선"에 대표 노선만 적으면 갈아타는 노선이 통째로 빠져 화면이
+        //   덜 말한 것이 된다 — 그래서 색과 목록의 근거를 갈라 둔다.
+        const pair = from !== to ? pairInfo(o.cityId, from, to) : null;
+        const legs = (pair && Array.isArray(pair.legs)) ? pair.legs : [];
+        const ridden = [];
+        for (let k = 0; k < legs.length; k++) {
+          const id = legs[k] && safeLineId(legs[k].lineId);
+          if (id) ridden.push(id);
+        }
+        // legs가 사전순 앞쪽 기준이라 반대 방향이면 탄 순서도 뒤집힌다 (SCHEMA §6).
+        if (from > to) ridden.reverse();
+        if (!ridden.length && lineId) ridden.push(lineId);
+        for (let k = 0; k < ridden.length; k++) {
+          if (seen[ridden[k]]) continue;
+          seen[ridden[k]] = 1;
+          out0.lines.push(ridden[k]);
         }
       }
       // 캐릭터가 같은 판단을 다시 하지 않도록 이 구간의 성격을 도착점에 적어 둔다.
@@ -16717,6 +17026,12 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/viewExplore.js");
     creditEl = el('p', 'source map-credit');
     rootEl.appendChild(creditEl);
 
+    // 오늘 타는 노선 — 지도 바로 아래다. 색으로 그은 선이 무슨 노선인지 여기서 읽힌다.
+    linesEl = el('div', 'rt-legs rt-legs--inline');
+    linesEl.setAttribute('role', 'list');
+    linesEl.setAttribute('aria-label', '오늘 타는 노선 (탄 순서)');
+    rootEl.appendChild(linesEl);
+
     noteEl = el('p', 'source');
     rootEl.appendChild(noteEl);
 
@@ -16771,6 +17086,7 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/viewExplore.js");
     lastDayKey = null;
     lastDoneKey = null;
     lastNavKey = null;
+    lastLinesKey = null;
     lastZoomKey = null;
     lastPlanRef = null;
     lastTripRef = null;
@@ -16791,7 +17107,7 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/viewExplore.js");
     while (rootEl.firstChild) rootEl.removeChild(rootEl.firstChild);
     dayNavEl = zoomEl = creditEl = canvasEl = tilesEl = baseEl = routeEl = meEl = null;
     geoEl = geoNoteEl = actorsEl = null;
-    noteEl = listHeadEl = listEl = null;
+    linesEl = noteEl = listHeadEl = listEl = null;
     sheetEl = sheetTitleEl = sheetBodyEl = null;
     lastTileKey = null;
     lastGeoKey = null;
@@ -16906,6 +17222,7 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/viewExplore.js");
     }
 
     // ②' 고지 — 축척·오늘 타는 노선 이름은 **동선을 그린 뒤에** 나온다.
+    drawLines();
     drawNote(box, tilesOn);
 
     // ③ 다녀옴 — SVG도 목록도 다시 만들지 않고 class만 바꾼다 (포커스 유지).
@@ -17286,6 +17603,37 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/viewExplore.js");
    * 노선을 색으로만 구분하면 색각 이상에서 읽히지 않는다 — 이름을 순서대로 적어
    * 색에 기대지 않고도 오늘 무엇을 타는지 알 수 있게 한다.
    */
+  /**
+   * "오늘 타는 노선" 범례 — 지도가 동선을 노선색으로 긋는데, 그 색이 무슨 노선인지
+   * 화면 어디에도 없으면 색이 뜻을 싣지 못한다. 그래서 **탄 순서대로** 기호·이름을 늘어놓는다.
+   * (아래 `.source` 문구도 같은 이름을 글로 적는다 — 색각 이상에서도 읽히도록 두 벌이다.)
+   *
+   * 부품은 일정 탭의 이동 구간(`.rt-*`)과 **같은 것**을 가로로 눕힌 것뿐이다.
+   * 두 화면이 같은 노선을 같은 모양으로 말해야 눈이 둘을 잇는다.
+   */
+  function drawLines() {
+    if (!linesEl) return;
+    const ids = (routeLines && Array.isArray(routeLines.lines)) ? routeLines.lines : [];
+    const key = (routeLines ? routeLines.cityId : '') + '@' + ids.join(',');
+    if (key === lastLinesKey) return;       // 내용이 그대로면 DOM을 건드리지 않는다 (BUG-008)
+    lastLinesKey = key;
+
+    if (!ids.length) {
+      linesEl.innerHTML = '';
+      return;
+    }
+    let html = '';
+    for (let i = 0; i < ids.length; i++) {
+      const line = lineOf(routeLines.cityId, ids[i]);
+      html += '<span class="rt-leg" data-line="' + esc(ids[i]) + '">' +
+        '<span class="rt-leg__head">' +
+        (line && line.code ? '<span class="rt-leg__code">' + esc(line.code) + '</span>' : '') +
+        '<span class="rt-leg__line">' + esc((line && line.name) || ids[i]) + '</span>' +
+        '</span></span>';
+    }
+    linesEl.innerHTML = html;
+  }
+
   function drawNote(box, tilesOn) {
     if (!noteEl) return;
     const p = projection(box, { w: SIZE, h: SIZE });
@@ -17856,8 +18204,7 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/viewExplore.js");
     // 위치를 켰다면 "지금 여기서 얼마나 걸리나"를 함께 보여준다 (추정임을 같이 적는다).
     html += geoEtaHTML(place, st);
 
-    html += '<p><a class="btn btn--primary" href="' + esc(mapsUrl(place)) +
-      '" target="_blank" rel="noopener">구글 지도에서 열기</a></p>';
+    html += actionsHTML(place);
 
     if (src && src.url) {
       html += '<p class="source">출처: <a class="source__link" href="' + esc(src.url) +
@@ -17875,8 +18222,7 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/viewExplore.js");
       (area ? '<span class="badge badge--area" data-area="' + esc(area) + '">' + esc(areaName(area)) + '</span>' : '') +
       '</p>' +
       geoEtaHTML(hotel, st) +
-      '<p><a class="btn btn--primary" href="' + esc(mapsUrl(hotel)) +
-      '" target="_blank" rel="noopener">구글 지도에서 열기</a></p>' +
+      actionsHTML(hotel) +
       '</div>';
   }
 
@@ -17933,6 +18279,50 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/viewExplore.js");
   }
 
   /**
+   * 구글맵 **길찾기** URL. 위의 mapsUrl("이 장소 보기")과 다른 물건이다.
+   *
+   * 공식 문서(Google Maps URLs, Directions 모드)에 정의된 파라미터만 쓴다:
+   *   `dir/?api=1` + `origin` + `destination` + `travelmode=transit`
+   * 목적지는 **좌표 우선**이다 — 이름은 동명이 있어 엉뚱한 곳이 열린다.
+   * 출발지는 위치를 켜 두었으면 현재 좌표이고, 아니면 **비운다** — 비우면 구글맵이
+   * 기기의 현재 위치를 잡으므로(공식 문서) 위치를 못 얻는 환경에서도 링크가 죽지 않는다.
+   *
+   * ⚠ BUG-003: 이 링크도 `_blank`로 열되 shell.installLinkDelegate가 위임한다.
+   * @param {Object} place
+   * @returns {string} 목적지를 못 만들면 빈 문자열
+   */
+  function dirUrl(place) {
+    const c = coordOf(place);
+    const dest = c ? c.lat + ',' + c.lng : ((place && (place.q || place.name)) || '');
+    if (!dest) return '';
+    const geo = geoMod();
+    const pos = (geo && typeof geo.isOn === 'function' && geo.isOn()) ? geo.current() : null;
+    let url = 'https://www.google.com/maps/dir/?api=1';
+    if (pos) url += '&origin=' + encodeURIComponent(pos.coords.lat + ',' + pos.coords.lng);
+    return url + '&destination=' + encodeURIComponent(String(dest)) + '&travelmode=transit';
+  }
+
+  /**
+   * 시트 아래쪽 액션 한 벌 — 길찾기(주)와 장소 보기(부).
+   * 둘은 다른 일을 한다: 앞은 **여기까지 가는 법**, 뒤는 **이 장소 자체**(사진·영업시간·리뷰)다.
+   * 출발지가 어디인지도 함께 적는다 — 안 적으면 무엇 기준인지 사용자가 풀 수 없다.
+   */
+  function actionsHTML(target) {
+    const dir = dirUrl(target);
+    const geo = geoMod();
+    const on = !!(geo && typeof geo.isOn === 'function' && geo.isOn());
+    return (dir
+      ? '<p><a class="btn btn--primary" href="' + esc(dir) +
+        '" target="_blank" rel="noopener">구글맵 길찾기</a></p>' +
+        '<p class="source">' + esc(on
+          ? '출발지는 현재 위치입니다.'
+          : '출발지는 구글맵이 잡는 현재 위치입니다.') + '</p>'
+      : '') +
+      '<p><a class="btn btn--ghost btn--sm" href="' + esc(mapsUrl(target)) +
+      '" target="_blank" rel="noopener">구글 지도에서 열기</a></p>';
+  }
+
+  /**
    * @returns {void}
    */
   function unmount() {
@@ -17980,7 +18370,7 @@ window.__TPBOOT && __TPBOOT.mark("app/src/ui/viewExplore.js");
     clickHandler = keydownHandler = docKeydownHandler = tileErrHandler = null;
     rootEl = dayNavEl = zoomEl = creditEl = canvasEl = tilesEl = baseEl = routeEl = meEl = null;
     geoEl = geoNoteEl = actorsEl = null;
-    noteEl = listHeadEl = listEl = null;
+    linesEl = noteEl = listHeadEl = listEl = null;
     sheetEl = sheetTitleEl = sheetBodyEl = null;
     lastFocus = null;
     areaIdx = {};
